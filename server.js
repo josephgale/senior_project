@@ -5,8 +5,9 @@ require('dotenv').config();
 
 const app = express();
 
+
 //connect to db
-mongoose.connect(process.env.DB_CONNECT,{
+mongoose.connect(process.env.DB_CONNECT,{ 
     useNewUrlParser: true,
     useFindAndModify: false,
     useUnifiedTopology: true,
