@@ -19,21 +19,17 @@ const userSchema = mongoose.Schema({
         trim: true,
         required: true,
         lowercase: true,
-        unique: true
+        
     },
-    hashed_pw: {
+    password: {
         type: String,
         required: true
     },
     role: {
         type: String,
-        default: 'student'
-    },
-    resetPasswordLink:{
-        data: String,
-        default: ''
-    },
-    salt: String,
-},{timestamps: true});
+        required: true
+    }    
+});
 
 //export user model 
+module.exports = mongoose.model('User',userSchema);
