@@ -13,7 +13,7 @@ const app = express();
 //production code when deployed to Heroku
 if(process.env.NODE_ENV==='production'){
     app.use(express.static(path.join(__dirname,'client/build')));
-    app.get('*',(req,res)=>{
+    app.get('/',(req,res)=>{
         res.sendFile(path.join(__dirname,'client/build','index.html'))
         })
     }
@@ -25,7 +25,7 @@ app.use(express.json())
 app.post('/users',(req,res)=>{    
     const user = new User(req.body); 
     user.save().then(()=>{
-        res.send(user)
+        res.status(200).send(user)
         console.log('user sent back')
     }).catch((e)=>{
         res.status(400).send(e)
@@ -35,20 +35,29 @@ app.post('/users',(req,res)=>{
 app.post('/lessons',(req,res)=>{
     const lesson = new Lesson(req.body);
     lesson.save().then(()=>{
-        res.send(lesson)
+        res.status(200).send(lesson)
     }).catch((e)=>{
         res.status(400).send(e)
-    });
-    
+    });     
 });
 
 /* ***** Read ***** */  
 
 app.get('/users',(req,res)=>{
-    User.find({}).then(
-        res.send(User)
-    ).catch((e)=>{res.status(400).send(e)})
+    User.find({}).then((users)=>{
+        console.log(users)
+        res.status(200).send(users)        
+        }).catch((e)=>{    
+    })
 });
+
+app.get('/lessons',(req,res)=>{
+    Lesson.find({}).then(()=>{
+        res.send(Lesson)
+    }).catch((e)=>{
+        res.status(400).send()
+    });
+})
 
 const port = process.env.PORT || 8000;
 app.listen(port,()=>console.log(`Server running on port ${port}`));
