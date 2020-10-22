@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-//create user schema
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken')
 
 const userSchema = mongoose.Schema({
     firstName: {
@@ -19,6 +20,9 @@ const userSchema = mongoose.Schema({
         trim: true,
         required: true,
         lowercase: true,
+        index: {
+            unique:true
+        }
         
     },
     password: {
@@ -28,8 +32,50 @@ const userSchema = mongoose.Schema({
     role: {
         type: String,
         required: true
-    }    
+    },
+    tokens: [{
+        token:{
+            type: String,
+            required: true
+        }
+    }]    
 });
+userSchema.methods.generateAuthToken = async function() {
+    const user = this
+    const token = jwt.sign({_id: user._id.toString()},'secret')
 
-//export user model 
-module.exports = mongoose.model('User',userSchema);
+    user.tokens = user.tokens.concat({ token })
+    await user.save()
+    
+    return token
+}
+
+//login user
+userSchema.statics.findByCredentials = async (email,password)=>{
+    const user = await User.findOne({email})
+    if(!user){
+        throw new Error('Unable to login')
+    }
+    
+    const isMatch = await bcrypt.compare(password,user.password)
+    
+    if(!isMatch){
+        throw new Error('Unable to login')
+    }
+    
+    return user
+}
+
+//Hash password before saving: NOTICE: This doesn't work for findByIdAndUpdate, just user.save()
+userSchema.pre('save', async function (next){
+    const user = this
+
+    if(user.isModified('password')){
+        user.password = await bcrypt.hash(user.password,8)
+    }
+
+    next()
+})
+
+const User = mongoose.model('User',userSchema)
+module.exports = User
