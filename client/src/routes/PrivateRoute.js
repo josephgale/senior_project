@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Route,Redirect} from 'react-router-dom';
 import {isAuth} from  '../validation/helpers';
 
+//this code is from oreillyl tutorial based off of documentation
 
 const PrivateRoute = ({component: Component,...rest})=>(
     <Route {...rest} render={
