@@ -1,30 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user')
+//controllers
+const {signup,activate,pwResetRequest,pwReset,googleLogin,login} = require('../controllers/auth')
 
-//create  user
-router.post('/users',async (req,res)=>{    
-    const user = new User(req.body);    
-    
-    try{
-        await user.save();
-        const token = await user.generateAuthToken();
-        console.log('made it this far');
-        res.status(200).send({user,token});
-    }catch(e){
-        res.status(400).send(e)
-    }
-
-    // User.save().then(()=>{
-    //     res.status(200).send(user)
-    // }).catch((e)=>{
-    //     res.status(500).send(e)
-    // })
-}); 
+router.post('/signup',signup);
+router.post('/activate',activate);
+router.post('/pwResetRequest',pwResetRequest);
+router.post('/pwReset',pwReset);
+router.post('/google-login',googleLogin)
+router.post('/login',login) 
 
 //login & authenticate user
 router.post('/login',async (req,res)=>{
     try{
+        
         const user = await User.findByCredentials(req.body.email, req.body.password)
         if(!user){
             res.status(404).send("Fool!")
@@ -35,6 +25,21 @@ router.post('/login',async (req,res)=>{
         res.status(400).send("Pitty the fool")
     }
 });
+
+//find user by email
+router.post('/checkEmail', async (req,res)=>{
+    try {
+        const emailExists = await User.exists({email: req.body.email})
+        if(!emailExists){
+            res.status(200).json({emailFound: false})
+        }else{
+            res.status(200).json({emailFound: true})
+        }
+    }catch(e){
+        res.status(400).json({error: "Connection failed"})
+        
+    }
+})
 
 //get all users
 router.get('/users',async (req,res)=>{

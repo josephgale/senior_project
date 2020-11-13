@@ -6,14 +6,19 @@ const userSchema = mongoose.Schema({
     firstName: {
         type: String,
         trim: true,
-        required: true,
+        required: false,
         max: 32
     },
     lastName: {
         type: String,
         trim: true,
-        required: true,
+        required: false,
         max: 32
+    },
+    name:{
+        type: String,
+        required: true,
+        max: 64
     },
     email:{
         type: String,
@@ -31,7 +36,7 @@ const userSchema = mongoose.Schema({
     },
     role: {
         type: String,
-        required: true
+        required: false
     },
     tokens: [{
         token:{

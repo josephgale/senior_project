@@ -3,6 +3,7 @@
 const express = require('express');
 const path = require('path');
 require('dotenv').config();
+var cors = require('cors')
 
 //Database
 require('./db/connection');
@@ -14,9 +15,8 @@ const lessonRoutes = require('./routes/lessons');
 /* ***** START MAIN API ***** */ 
 //Server setup and route specs
 const app = express();
-app.use((req,res,next)=>{
-    res.send('We are in maintenance mode...no using site!')
-})
+
+app.use(cors()); //allows for ajax calls to server from client
 app.use(express.json());
 app.use('/api',accountRoutes);
 app.use('/api',lessonRoutes);
