@@ -6,6 +6,8 @@ import LoginPage from '../pages/loginpage/loginpage'
 import ActivationPage from '../pages/activationpage/activationpage'
 import PwResetRequest from '../pages/pwresetrequestpage/pwresetrequestpage'
 import PwReset from '../pages/pwresetpage/pwresetpage'
+import Dashboard from '../pages/dashboardpage/dashboardpage'
+import PrivateRoute from './PrivateRoute'
 
 const Routes = () => {
     return(
@@ -17,6 +19,7 @@ const Routes = () => {
                 <Route path='/activate/:token' component={ActivationPage}/>
                 <Route path='/pwResetRequest' component={PwResetRequest}/>
                 <Route path='/pwReset/:token' component={PwReset}/>
+                <PrivateRoute path='/dashboard' component={Dashboard}/>
             </Switch>
         </BrowserRouter>
     )
