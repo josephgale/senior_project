@@ -1,7 +1,9 @@
 import React from 'react';
 import GoogleLogin from 'react-google-login';
 import axios from 'axios';
+import {setCookie,setLocalStorage} from '../validation/helpers'
 require('dotenv').config();
+
 //const dotenv = require('dotenv')
 // import dotenv from 'dotenv';
 // dotenv.config()
@@ -15,7 +17,11 @@ const Google = () => {
             data: {idToken: res.tokenId}
         })
         .then(res=>{
-            console.log('Google signin success', res)
+            console.log('Google signin success', res.data.token)
+            //set cookie/local storage here
+            setCookie('token',res.data.token)
+            setLocalStorage('user',res.data.user)
+
         })
         .catch((e)=>{
             console.log('Error: ', e)

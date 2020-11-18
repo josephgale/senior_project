@@ -156,22 +156,26 @@ This function does the following:
 3. Checks if user is in database and either adds or logs in user
 4. 
 
+* This function is called when authentication for google is routed to api/google-login
 */
 
 //create a new client object 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 exports.googleLogin = (req,res) => {
-   //verify idToken from request
+   //idToken originally provided by google in <Google />, but added to req.body on ajax call
    const {idToken} = req.body
    client.verifyIdToken({idToken,audience:process.env.GOOGLE_CLIENT_ID})
    .then(
-       (response) =>{           
+       //verifyIdToken provides response object which needs to be different from googleLogin res
+       (response) =>{    
+            //destructure variables from payload
             const {email_verified,name,email} = response.payload
             if(email_verified){
                 User.findOne({email}).exec((err,user)=>{
                     //return user if exists
                     if(user){
                         console.log('user was found')
+                        //create a token (not the one from Google) for cookie
                         const token = jwt.sign({_id:user._id},process.env.JWT_SECRET,{expiresIn: '7d'})
                         const {_id,email,name,role} = user;
                         return res.json({
