@@ -34,16 +34,12 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    role: {
-        type: String,
-        required: false
+    teaching: {
+        
     },
-    tokens: [{
-        token:{
-            type: String,
-            required: true
-        }
-    }]    
+    enrolled: {
+        type: String        
+    }
 });
 userSchema.methods.generateAuthToken = async function() {
     const user = this

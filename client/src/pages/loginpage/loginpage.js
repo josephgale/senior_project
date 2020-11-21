@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import Layout from '../../components/layout'
 import {Form} from '../../pages/signuppage/signup.styles'
-import {Link, Redirect} from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
 import Google from '../../components/googleAuth';
 import axios from 'axios';
 import {authenticate} from '../../validation/helpers'
@@ -14,6 +14,8 @@ const LoginPage =()=>{
         password: "",
         errors: {}
     })
+
+    const history = useHistory()
 
     const handleChange = (name) =>(event)=>{
         setValues({...values,[name]:event.target.value});
@@ -36,6 +38,7 @@ const LoginPage =()=>{
                     setValues({...values,name:'',email:'',password:''})
                     console.log(values)
                     //return <Redirect to="/signup"/>
+                    history.push('/dashboard')
                 })
             })
             .catch((res)=>console.log("Please check username and password",res))

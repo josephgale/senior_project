@@ -229,3 +229,42 @@ exports.login = (req,res) =>{
         }
     })
 }
+
+exports.newLesson = (req,res) => {
+    console.log(req.body)
+    User.updateOne({email:req.body.email},{$push: {teaching:
+        {
+        lessonName: req.body.lessonName,
+        asset: req.body.asset,
+        question1: req.body.question1,
+        answer1:req.body.answer1,
+        question2: req.body.question2,
+        answer2:req.body.answer2,
+        question3:req.body.question3,
+        answer:req.body.answer3
+        }
+    }},(err,docs)=>{
+        if(err){
+            console.log('There was an error',err)
+        }else{
+            console.log('Updated docs',docs)
+        }
+    })
+
+}
+
+exports.getLessons = (req,res)=>{
+    console.log('getLessons was hit')
+    User.findOne({email:req.body.email}).exec((err,user)=>{
+        if(!user){
+            console.log('No email found',req) 
+            res.status(404).send('Please check email and password')
+        }else{
+            res.status(200).send(user.teaching)
+        }
+    })   
+}
+
+exports.updateLesson = (req,res)=>{
+   console.log('updateLessons was hit',req.body)
+}

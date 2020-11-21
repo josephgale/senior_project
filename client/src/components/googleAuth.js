@@ -1,4 +1,5 @@
 import React from 'react';
+import {useHistory} from 'react-router-dom'
 import GoogleLogin from 'react-google-login';
 import axios from 'axios';
 import {setCookie,setLocalStorage} from '../validation/helpers'
@@ -9,6 +10,7 @@ require('dotenv').config();
 // dotenv.config()
 
 const Google = () => {
+    const history = useHistory()
     const responseGoogle = (res) =>{
         console.log(res);
         axios({
@@ -21,6 +23,7 @@ const Google = () => {
             //set cookie/local storage here
             setCookie('token',res.data.token)
             setLocalStorage('user',res.data.user)
+            history.push("/dashboard")
 
         })
         .catch((e)=>{

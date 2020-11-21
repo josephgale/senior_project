@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user')
 //controllers
-const {signup,activate,pwResetRequest,pwReset,googleLogin,login} = require('../controllers/auth')
+const {signup,activate,pwResetRequest,pwReset,googleLogin,login,newLesson,getLessons,updateLesson} = require('../controllers/auth')
 
 router.post('/signup',signup);
 router.post('/activate',activate);
@@ -10,6 +10,9 @@ router.post('/pwResetRequest',pwResetRequest);
 router.post('/pwReset',pwReset);
 router.post('/google-login',googleLogin)
 router.post('/login',login) 
+router.post('/getLessons',getLessons)
+router.post('/newLesson',newLesson)
+router.post('/updateLesson',updateLesson)
 
 //login & authenticate user
 router.post('/login',async (req,res)=>{

@@ -8,6 +8,9 @@ import PwResetRequest from '../pages/pwresetrequestpage/pwresetrequestpage'
 import PwReset from '../pages/pwresetpage/pwresetpage'
 import Dashboard from '../pages/dashboardpage/dashboardpage'
 import PrivateRoute from './PrivateRoute'
+import Logout from './Logout'
+import NewLesson from '../pages/newlessonpage/newlessonpage'
+import EditLesson from '../pages/editlessonpage/editlessonpage'
 
 const Routes = () => {
     return(
@@ -16,10 +19,13 @@ const Routes = () => {
                 <Route path='/' exact component={App}/>
                 <Route path='/signup' component={SignupPage}/>
                 <Route path='/login' component={LoginPage}/>
+                <Route path='/logout' component={Logout}/>
                 <Route path='/activate/:token' component={ActivationPage}/>
                 <Route path='/pwResetRequest' component={PwResetRequest}/>
                 <Route path='/pwReset/:token' component={PwReset}/>
                 <PrivateRoute path='/dashboard' component={Dashboard}/>
+                <PrivateRoute path='/newLesson' component={NewLesson}/>
+                <PrivateRoute path='/editLesson' component={EditLesson}/>
             </Switch>
         </BrowserRouter>
     )
