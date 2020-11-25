@@ -1,84 +1,55 @@
 import React, {useState,useEffect} from 'react';
 import Layout from '../../components/layout'
-import {getCookie} from '../../validation/helpers'
 import Axios from 'axios'
 import {useHistory} from 'react-router-dom'
-import {Redirect } from 'react-router'
-import getAllLessons from '../../functions/lessonList'
+import Lessons from '../../components/lessons'
 
-const Dashboard = (props) => {
+
+const Dashboard = () => {
     //set state for lessons that teacher is teaching; each lesson an object
-    const [values,setValues] = useState({     
-        
+    const [values,setValues] = useState({    
+        lessons: [] 
     });
 
     useEffect(() => {     
-        console.log('State update!! const values = ', values)         
-      }, [values]);
+        console.log('State update!! const values = ', values) 
+        lessonsAPICall()        
+      }, []);
 
-    //get user id from local storage
-    const user = localStorage.getItem('user')
-    const email = JSON.parse(user).email
-    
     //prep for routing to other pages
     const history = useHistory();
-    const toAddLesson = () => {   
-        history.push("/newLesson")
-        
-    }
+    const toAddLesson = () => history.push("/newLesson")
 
-    //when routing to toEditLessonPage, add an object with the state that will be present on toEditLessonPage
-    const toEditLessonPage = (values) => {
-        history.push({
-            pathname: '/editLesson',
-            state:{
-                lessonName:values.lessonName,
-                asset: values.asset,
-                question1: values.question1,
-                answer1: values.answer1,
-                question2: values.question2,
-                answer2: values.answer2,
-                question3: values.question3,
-                answer3: values.answer3
-
-            }
-        })
-        
-    }
-
-    const getLessonsFromAPI = () => {        
-        Axios({
+    //get user id from local storage to authenticate API call
+    const user = localStorage.getItem('user')
+    const email = JSON.parse(user).email
+    const lessonsAPICall =()=>{ 
+        Axios(
+            {
             method: 'POST',
             url: '/api/getLessons',
             data: {email}
-        })
-        .then((res)=>{       
-                //set state to all lessons retrieved from api          
-                setValues(res.data.lessons)       
-            })
+            }
+        )
+        .then((res)=>
+            { 
+                setValues({values,lessons: res.data.lessons})
+            }
+        )
         .catch((e)=>console.log('Problem retrieving all lessons from API: ', e))
            
     }
 
     return(
-        <Layout>
-            
+        <Layout>           
             <h1>Dashboard Page</h1>
             <ul> Components Needed
-                <li>Add Lesson</li>
-                <li>Edit Lesson</li>
                 <li>Do a lesson</li>
                 <li>Sign up for a lesson</li>
             </ul>
             <hr></hr>
             <h2>Lessons you're teaching</h2>
-            {window.onload=getLessonsFromAPI}
-                    <ul>
-                        {Object.keys(values).map(
-                            (each)=>{return <li key={each}>{values[each].lessonName}<button onClick={()=>toEditLessonPage(values[each])}>Edit</button><button>Delete</button></li>})}
-                    </ul>
-                    
-                
+            <Lessons lessons={values.lessons}/> 
             <button onClick={toAddLesson}>click here to add a lesson</button>
             <hr></hr>
             <h2>Lessons you're enrolled in</h2>

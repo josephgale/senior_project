@@ -1,7 +1,4 @@
 import Axios from 'axios'
-
-
-
 const getAllLessons = () => {
     //get user id from local storage
     const user = localStorage.getItem('user')
