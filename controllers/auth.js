@@ -353,6 +353,21 @@ exports.deleteLesson = (req,res)=>{
     })
 
 }
+exports.enrollmentOptions = async(req,res) =>{
+    //find all users that are not current user
+    const enrolled = await User.find({email: req.body.email})
+    const otherUsers = await User.find({email: {$ne:req.body.email}})
+    //loop through result and create an array of objects with name -- lesson
+    Object.values(otherUsers)
+        .map(
+            (user)=>Object.values(user.teaching)
+            .map(
+                (lesson)=>console.log(user.name, lesson._id, lesson.lessonName)
+                )
+            )
+    //filter through that array and pull any objects that match enrolled name -- lesson
+    //console.log('the users are: ', users)
+}
 
 // exports.updateLesson = (req,res)=>{
 //    console.log('updateLessons was hit',req.body)

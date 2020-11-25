@@ -11,6 +11,7 @@ import PrivateRoute from './PrivateRoute'
 import Logout from './Logout'
 import NewLesson from '../pages/newlessonpage/newlessonpage'
 import EditLesson from '../pages/editlessonpage/editlessonpage'
+import Enrollment from '../pages/enrollmentpage/enrollmentpage'
 
 const Routes = () => {
     return(
@@ -26,6 +27,7 @@ const Routes = () => {
                 <PrivateRoute path='/dashboard' component={Dashboard}/>
                 <PrivateRoute path='/newLesson' component={NewLesson}/>
                 <PrivateRoute path='/editLesson' component={EditLesson}/>
+                <PrivateRoute path='/enroll' component={Enrollment}/>
             </Switch>
         </BrowserRouter>
     )

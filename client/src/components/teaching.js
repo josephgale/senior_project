@@ -2,7 +2,7 @@ import React, {useEffect,useState} from 'react'
 import {useHistory} from 'react-router-dom'
 import Axios from 'axios'
 
-const Lessons = (props) => {   
+const Teaching = (props) => {   
         
     //get user id from local storage to authenticate API call
     const user = localStorage.getItem('user')
@@ -37,6 +37,7 @@ const Lessons = (props) => {
     
     //prep history
     const history = useHistory();
+    const toAddLesson = () => history.push("/newLesson")
     const toEditLessonPage = (lessonObject) => {
         history.push(
             {pathname: '/editLesson',
@@ -78,6 +79,7 @@ const Lessons = (props) => {
 
     return(
         <div>
+            <h2>Lessons you're teaching</h2>
             <ul>
                 {
                     values.lessons.map((each)=>
@@ -88,10 +90,11 @@ const Lessons = (props) => {
                     )
                 }
             </ul>
+            <button onClick={toAddLesson}>Create a New Lesson</button>
         </div>
        
 
     )
 }
 
-export default Lessons
+export default Teaching
