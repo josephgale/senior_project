@@ -2,7 +2,7 @@ import React, {useState,useEffect} from 'react';
 import Layout from '../../components/layout'
 import Axios from 'axios'
 import {useHistory} from 'react-router-dom'
-import Lessons from '../../components/lessons'
+import Lessons from '../../components/teaching'
 
 
 const Dashboard = () => {

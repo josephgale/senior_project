@@ -331,6 +331,29 @@ exports.getLessons = (req,res)=>{
     })   
 }
 
+exports.deleteLesson = (req,res)=>{
+    User.findOneAndUpdate(        
+        { "email":req.body.email, "teaching.lessonName" : req.body.lessonName},
+        { $pull: 
+            {
+                "teaching": {
+                    "lessonName": req.body.lessonName
+                }
+            }
+        }
+    )
+    .exec((err,doc)=>{
+        if(err){
+            console.log('There was an error deleting lesson',doc)
+            return res.status(400).send(err)
+        }else{
+            console.log('Possible success in deleting record')
+            return res.status(200).send("Possible success")
+        }
+    })
+
+}
+
 // exports.updateLesson = (req,res)=>{
 //    console.log('updateLessons was hit',req.body)
 //    User.updateOne(
