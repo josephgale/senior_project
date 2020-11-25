@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Lesson = require('../models/lesson');
+const Lesson = require('../models/user');
 
 //create lesson
 router.post('/lessons',async (req,res)=>{

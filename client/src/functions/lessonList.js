@@ -1,9 +1,11 @@
 import Axios from 'axios'
-//get user id from local storage
-const user = localStorage.getItem('user')
-const email = JSON.parse(user).email
+
+
 
 const getAllLessons = () => {
+    //get user id from local storage
+    const user = localStorage.getItem('user')
+    const email = JSON.parse(user).email
     const allLessons = []
     Axios({
         method: 'POST',

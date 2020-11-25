@@ -2,11 +2,12 @@ const jwt = require('jsonwebtoken');
 const sgMail = require('@sendgrid/mail')
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const User = require('../models/user')
+const Lesson = require('../models/user')
 const {OAuth2Client} = require('google-auth-library')
 
 //send email link for account creation
 exports.signup = async (req,res)=>{    
-        const {name,email,password,role} = req.body;   
+        const {firstName,lastName,name,email,password,role} = req.body;   
     
         //validate if email already exists 
         User.findOne({email}).exec((err,user)=>{
@@ -14,7 +15,7 @@ exports.signup = async (req,res)=>{
                 return res.status(400).json({error:`${email} not available`})
             }
             //if no user exists, create token 
-            const token = jwt.sign({name,email,password,role},process.env.JWT_ACCOUNT_ACTIVATION,{expiresIn: '10min'})
+            const token = jwt.sign({firstName, lastName, name,email,password,role},process.env.JWT_ACCOUNT_ACTIVATION,{expiresIn: '10min'})
 
             //create email template
             const emailData = {
@@ -57,8 +58,8 @@ exports.activate = (req,res) => {
             }
 
             //decode token and save to database
-            const {name,email,password,role} = jwt.decode(token)
-            user = new User({name,email,password,role})
+            const {firstName,lastName,name,email,password,role} = jwt.decode(token)
+            user = new User({firstName,lastName,name,email,password,role})
             user.save((err,user)=>{
                 if(err){
                     console.log('activation account error')
@@ -230,27 +231,90 @@ exports.login = (req,res) =>{
     })
 }
 
-exports.newLesson = (req,res) => {
-    console.log(req.body)
-    User.updateOne({email:req.body.email},{$push: {teaching:
-        {
-        lessonName: req.body.lessonName,
-        asset: req.body.asset,
-        question1: req.body.question1,
-        answer1:req.body.answer1,
-        question2: req.body.question2,
-        answer2:req.body.answer2,
-        question3:req.body.question3,
-        answer:req.body.answer3
+// exports.newLesson = (req,res) => {
+//     console.log(req.body)
+//     User.updateOne({email:req.body.email},{$push: {teaching:
+//         {
+//         lessonName: req.body.lessonName,
+//         asset: req.body.asset,
+//         question1: req.body.question1,
+//         answer1:req.body.answer1,
+//         question2: req.body.question2,
+//         answer2:req.body.answer2,
+//         question3:req.body.question3,
+//         answer:req.body.answer3
+//         }
+//     }},(err,docs)=>{
+//         if(err){
+//             console.log('There was an error',err)
+//             res.send('There was an error')
+//         }else{
+//             console.log('Updated docs',docs)
+//             res.send('new lesson possibly added')
+//         }
+//     })
+
+// }
+
+exports.newLesson = async (req,res) => {
+    
+    User.updateOne(
+        {email:req.body.email},
+        {$push: {teaching:
+                    [
+                        {
+                        lessonName: req.body.lessonName,
+                        asset: req.body.asset,
+                        question1: req.body.question1,
+                        answer1:req.body.answer1,
+                        question2: req.body.question2,
+                        answer2:req.body.answer2,
+                        question3:req.body.question3,
+                        answer:req.body.answer3
+                        }
+                    ]
+                }
+        },
+        (err,docs)=>{
+            if(err){
+                console.log('There was an error',err)
+                res.send('There was an error')
+            }else{
+                console.log('Updated docs',docs)
+                res.send(docs)
+            }
         }
-    }},(err,docs)=>{
+    )
+    
+}
+
+exports.updateLesson = (req,res)=>{
+    console.log('update Lesson hit. Here is req:',req.body)
+    User.findOneAndUpdate(        
+        { "email":req.body.email, "teaching.lessonName" : req.body.originalName},
+        { $set: 
+            {
+            'teaching.$.lessonName': req.body.lessonName,
+            'teaching.$.asset': req.body.asset,
+            'teaching.$.question1': req.body.question1,
+            'teaching.$.answer1':req.body.answer1,
+            'teaching.$.question2': req.body.question2,
+            'teaching.$.answer2':req.body.answer2,
+            'teaching.$.question3':req.body.question3,
+            'teaching.$.answer3': req.body.answer3
+            }
+        }
+    )
+    .exec((err,doc)=>{
         if(err){
-            console.log('There was an error',err)
+            console.log('There was an error updating lesson',doc)
+            return res.status(400).send(err)
         }else{
-            console.log('Updated docs',docs)
+            console.log('Possible success in updating record')
+            return res.status(200).send("Possible success")
         }
     })
-
+        
 }
 
 exports.getLessons = (req,res)=>{
@@ -260,11 +324,42 @@ exports.getLessons = (req,res)=>{
             console.log('No email found',req) 
             res.status(404).send('Please check email and password')
         }else{
-            res.status(200).send(user.teaching)
+            //returns an object containing teaching objects
+            console.log(user)
+            res.send({lessons: user.teaching})
         }
     })   
 }
 
-exports.updateLesson = (req,res)=>{
-   console.log('updateLessons was hit',req.body)
-}
+// exports.updateLesson = (req,res)=>{
+//    console.log('updateLessons was hit',req.body)
+//    User.updateOne(
+//        {email:req.body.email},
+//        {$set:{"teaching.$[current].lessonName":req.body.lessonName}},
+//        {arrayFilters: [{current:{lessonName:req.body.originalName}}]})
+//        .exec((err,data)=>{
+//         if (err){
+//             console.log('There was an error:',err)
+//             res.status(400).send('Something didnt go right')
+//         }else{
+//             console.log('Success, here is doc', data)
+//             res.status(200).send('Things appear to have gone correctly')
+//         }
+//        })
+
+//     console.log('original name: ', req.body)
+//     User.updateOne(
+//         {email:req.body.email},
+//         {$pull: {"teaching.lessonName": req.body.originalName}},
+//         {arrayFilters: [{"teaching.lessonName":req.body.originalName}]}
+//     )
+//     .exec((err,data)=>{
+//                 if (err){
+//                     console.log('There was an error:',err)
+//                     res.status(400).send('Something didnt go right')
+//                 }else{
+//                     console.log('Success, here is doc', data)
+//                     res.status(200).send('Things appear to have gone correctly')
+//                 }
+// })
+// }

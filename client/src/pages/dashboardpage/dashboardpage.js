@@ -7,11 +7,13 @@ import {Redirect } from 'react-router'
 import getAllLessons from '../../functions/lessonList'
 
 const Dashboard = (props) => {
+    //set state for lessons that teacher is teaching; each lesson an object
     const [values,setValues] = useState({     
-        teaching: {}
+        
     });
 
-    useEffect(() => {              
+    useEffect(() => {     
+        console.log('State update!! const values = ', values)         
       }, [values]);
 
     //get user id from local storage
@@ -20,39 +22,42 @@ const Dashboard = (props) => {
     
     //prep for routing to other pages
     const history = useHistory();
-    const toAddLessonComp = () => {   
+    const toAddLesson = () => {   
         history.push("/newLesson")
         
     }
 
-    const toEditLessonPage = (lesson) => {
+    //when routing to toEditLessonPage, add an object with the state that will be present on toEditLessonPage
+    const toEditLessonPage = (values) => {
         history.push({
             pathname: '/editLesson',
             state:{
-                lesson
+                lessonName:values.lessonName,
+                asset: values.asset,
+                question1: values.question1,
+                answer1: values.answer1,
+                question2: values.question2,
+                answer2: values.answer2,
+                question3: values.question3,
+                answer3: values.answer3
+
             }
         })
         
     }
 
-    const allLessons = []
-    const getAllLessons = () => {        
+    const getLessonsFromAPI = () => {        
         Axios({
             method: 'POST',
             url: '/api/getLessons',
             data: {email}
         })
-        .then((res)=>{
-                //console.log('retreiving all lessons',res.data)                
-                Object.keys(res.data).forEach(key=>{
-                    allLessons.push(res.data[key].lessonName)
-                })
-                
-                //this is an async method that cannot be awaited, which is why foreach didn't work
-                setValues({...values,teaching:allLessons})
-                
+        .then((res)=>{       
+                //set state to all lessons retrieved from api          
+                setValues(res.data.lessons)       
             })
-        .catch((e)=>console.log('could not retrieve all lessons', e))
+        .catch((e)=>console.log('Problem retrieving all lessons from API: ', e))
+           
     }
 
     return(
@@ -67,11 +72,14 @@ const Dashboard = (props) => {
             </ul>
             <hr></hr>
             <h2>Lessons you're teaching</h2>
-            <button onClick={getAllLessons}>Retrieve Lessons</button> 
-                <ul>{Object.keys(values.teaching).map((each)=>{
-                    return <li key={each}>{values.teaching[each]}<button onClick={()=>toEditLessonPage(values.teaching[each])}>Edit</button><button>Delete</button></li>
-                })}</ul>
-            <button onClick={toAddLessonComp}>click here to add a lesson</button>
+            {window.onload=getLessonsFromAPI}
+                    <ul>
+                        {Object.keys(values).map(
+                            (each)=>{return <li key={each}>{values[each].lessonName}<button onClick={()=>toEditLessonPage(values[each])}>Edit</button><button>Delete</button></li>})}
+                    </ul>
+                    
+                
+            <button onClick={toAddLesson}>click here to add a lesson</button>
             <hr></hr>
             <h2>Lessons you're enrolled in</h2>
             <p>My lesson<button>Start or Resume Lesson</button></p>

@@ -2,7 +2,6 @@ import React from 'react'
 import Layout from '../../components/layout'
 import {withRouter} from 'react-router-dom'
 import {Form} from '../signuppage/signup.styles'
-import ImageUploader from 'react-images-upload'
 import Axios from 'axios'
 import {useHistory} from 'react-router-dom'
 
@@ -31,8 +30,9 @@ const NewLesson = () => {
 
             }
         })
-        .then(
-            history.push('/dashboard')
+        .then((res)=>{
+            console.log('Response after lesson added: ', res)
+            history.push('/dashboard')}            
             )
         .catch(
                 (e)=>console.log(e)

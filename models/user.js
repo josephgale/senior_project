@@ -2,6 +2,37 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken')
 
+const lessonSchema = mongoose.Schema({
+    lessonName:{
+        type: String
+    },
+    asset:{
+        type: String
+    },
+    question1:{
+        type: String
+    },
+    answer1:{
+        type: String
+    },
+    question2:{
+        type: String
+    },
+    answer2:{
+        type: String
+    },
+    question3:{
+        type: String
+    },
+    answer3:{
+        type: String
+    }
+
+});
+
+
+
+
 const userSchema = mongoose.Schema({
     firstName: {
         type: String,
@@ -15,9 +46,9 @@ const userSchema = mongoose.Schema({
         required: false,
         max: 32
     },
-    name:{
+    name:{ 
         type: String,
-        required: true,
+        required: false,
         max: 64
     },
     email:{
@@ -34,9 +65,8 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    teaching: {
-        
-    },
+    teaching: [lessonSchema],
+    
     enrolled: {
         type: String        
     }
@@ -79,4 +109,8 @@ userSchema.pre('save', async function (next){
 })
 
 const User = mongoose.model('User',userSchema)
-module.exports = User
+const Lesson = mongoose.model('Lesson',lessonSchema)
+
+
+module.exports = User,Lesson
+

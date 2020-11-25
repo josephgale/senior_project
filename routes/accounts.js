@@ -14,21 +14,6 @@ router.post('/getLessons',getLessons)
 router.post('/newLesson',newLesson)
 router.post('/updateLesson',updateLesson)
 
-//login & authenticate user
-router.post('/login',async (req,res)=>{
-    try{
-        
-        const user = await User.findByCredentials(req.body.email, req.body.password)
-        if(!user){
-            res.status(404).send("Fool!")
-        }
-        const token = await user.generateAuthToken();
-        res.send({user,token})
-    }catch(e){
-        res.status(400).send("Pitty the fool")
-    }
-});
-
 //find user by email
 router.post('/checkEmail', async (req,res)=>{
     try {
