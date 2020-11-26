@@ -231,31 +231,6 @@ exports.login = (req,res) =>{
     })
 }
 
-// exports.newLesson = (req,res) => {
-//     console.log(req.body)
-//     User.updateOne({email:req.body.email},{$push: {teaching:
-//         {
-//         lessonName: req.body.lessonName,
-//         asset: req.body.asset,
-//         question1: req.body.question1,
-//         answer1:req.body.answer1,
-//         question2: req.body.question2,
-//         answer2:req.body.answer2,
-//         question3:req.body.question3,
-//         answer:req.body.answer3
-//         }
-//     }},(err,docs)=>{
-//         if(err){
-//             console.log('There was an error',err)
-//             res.send('There was an error')
-//         }else{
-//             console.log('Updated docs',docs)
-//             res.send('new lesson possibly added')
-//         }
-//     })
-
-// }
-
 exports.newLesson = async (req,res) => {
     
     User.updateOne(
@@ -353,51 +328,82 @@ exports.deleteLesson = (req,res)=>{
     })
 
 }
-exports.enrollmentOptions = async(req,res) =>{
+exports.getEnrollmentOptions = async(req,res) =>{
+    //get all classes that user is already enrolled in
+    const user = await User.find({email: req.body.email})
+    //User.find returns an array with one object, map that object to create to array to filter all enrollments
+    const enrolledArray = user[0].enrolled.map((each)=>each.lesson_id)    
+    
     //find all users that are not current user
-    const enrolled = await User.find({email: req.body.email})
     const otherUsers = await User.find({email: {$ne:req.body.email}})
-    //loop through result and create an array of objects with name -- lesson
+    
+    //loop through result from otherUsers and create an array of objects with name -- lessonid -- lessonName
+    let allClasses = []
     Object.values(otherUsers)
         .map(
             (user)=>Object.values(user.teaching)
             .map(
-                (lesson)=>console.log(user.name, lesson._id, lesson.lessonName)
+                (lesson)=>
+                    {
+                        
+                        allClasses.push({'teacher':user.name,'lesson_id':lesson._id,'lessonName':lesson.lessonName})
+                        
+                    }
                 )
             )
-    //filter through that array and pull any objects that match enrolled name -- lesson
-    //console.log('the users are: ', users)
+    
+    //filter out options in which user is already enrolled
+    let filteredArray = allClasses.filter
+        (
+            (each)=>
+            {
+
+                if(!enrolledArray.includes(each.lesson_id.toString()))
+                    {
+                        //console.log('returning', each)
+                        return each
+                    }
+            }
+        )
+
+    res.send(filteredArray)
+
 }
 
-// exports.updateLesson = (req,res)=>{
-//    console.log('updateLessons was hit',req.body)
-//    User.updateOne(
-//        {email:req.body.email},
-//        {$set:{"teaching.$[current].lessonName":req.body.lessonName}},
-//        {arrayFilters: [{current:{lessonName:req.body.originalName}}]})
-//        .exec((err,data)=>{
-//         if (err){
-//             console.log('There was an error:',err)
-//             res.status(400).send('Something didnt go right')
-//         }else{
-//             console.log('Success, here is doc', data)
-//             res.status(200).send('Things appear to have gone correctly')
-//         }
-//        })
+exports.getEnrolledLessons = async (req,res) => {
+    console.log('getEnrolledLessons hit!')
+    const user = await User.find({email: req.body.email})
+    //User.find returns an array with one object, map that object to create to array to filter all enrollments
+    const enrolledArray = user[0].enrolled.map((each)=>each)  
+    res.send(enrolledArray)  
 
-//     console.log('original name: ', req.body)
-//     User.updateOne(
-//         {email:req.body.email},
-//         {$pull: {"teaching.lessonName": req.body.originalName}},
-//         {arrayFilters: [{"teaching.lessonName":req.body.originalName}]}
-//     )
-//     .exec((err,data)=>{
-//                 if (err){
-//                     console.log('There was an error:',err)
-//                     res.status(400).send('Something didnt go right')
-//                 }else{
-//                     console.log('Success, here is doc', data)
-//                     res.status(200).send('Things appear to have gone correctly')
-//                 }
-// })
-// }
+}
+exports.enroll = (req,res) => {
+    console.log('enroll hit', req.body)
+    User.findOneAndUpdate(        
+        { "email":req.body.email},
+        {$push: 
+            {enrolled:
+                [
+                    {
+                    lesson_id: req.body.lesson_id,
+                    teacher: req.body.teacher,
+                    lessonName: req.body.lessonName,
+                    completed:0,
+                    score:0,
+                    }
+                ]
+            }
+        }   
+    )
+    .exec((err,doc)=>{
+        if(err){
+            console.log('There was an error enrolling in the lesson',doc)
+            return res.status(400).send(err)
+        }else{
+            console.log('Possible success in enrolling in lesson')
+            return res.status(200).send(doc)
+        }
+    })
+}
+

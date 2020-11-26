@@ -7,7 +7,8 @@ const Enroll = () => {
     
     //create state so that once user enrolls in class it disappears from available options
     const [values, setValues] = useState({
-        lessons:[]
+        enrollmentOptions:[],
+        
     })
 
     //useEffect will populate initital enrollment list and update as user enrolls in classes
@@ -31,17 +32,37 @@ const Enroll = () => {
         )
         .then((res)=>
             { 
-                //setValues({values,lessons: res.data.lessons})
-                console.log(res.data)
+                setValues({values,enrollmentOptions: res.data})
+                console.log('Returned data from getEnrollmentOptions:',res.data)
             }
         )
         .catch((e)=>console.log('Problem retrieving all lessons from API: ', e))        
-        }
+    }
 
 
     const enroll = (classObject) =>{
-        console.log('You have enrolled in this class')
-        //make ajax call 
+        console.log('You have enrolled in', classObject)
+        Axios(
+            {
+                method: 'POST',
+                url: '/api/enroll',
+                data: {
+                    email,
+                    lesson_id:classObject.lesson_id,
+                    teacher: classObject.teacher,
+                    lessonName: classObject.lessonName
+                }
+            }
+        )
+        .then((res)=>
+            { 
+                //setValues({values,enrolled: res.data})
+                console.log('Returned data from api:',res)
+                //this resests the state to current data in database
+                enrollmentOptionsAPICall()
+            }
+        )
+        .catch((e)=>console.log('Problem retrieving all lessons from API: ', e))  
     }
 
     //set up history and routes
@@ -50,17 +71,19 @@ const Enroll = () => {
 
     return(
         <Layout>
-            <h1>This is the enrollment page</h1>
+            <h1>Enrollment page</h1>
+            <ul><lh>Enrollment Options</lh>
             {
-                //iterate through state and populate with lesson options:
-                <div>
-                    <button onClick={enrollmentOptionsAPICall}>Temp - Get enrollment options</button>
-                    <p>Class Name -- Instructor Name -- <button onClick={enroll}>Enroll</button></p>
-                    <button onClick={toDashboard}>Return to dashboard</button>
-                </div>
+                values.enrollmentOptions.map((each)=>
+                    <li key={each.lesson_id}>
+                        {each.teacher} --- {each.lessonName}
+                        <button onClick={()=>enroll(each)}>Enroll</button>
+                    </li>
+                )
             }
+            </ul>
+            <button onClick={toDashboard}>Return to dashboard</button>
         </Layout>
-        
     )
 }
 

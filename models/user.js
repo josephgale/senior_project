@@ -36,6 +36,28 @@ const lessonSchema = mongoose.Schema({
 
 });
 
+const enrollmentSchema = mongoose.Schema({
+    lesson_id: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    teacher:{
+        type: String
+    },
+    lessonName:{
+        type: String
+    },
+    completed:{
+        type: Number
+    },
+    score:{
+        type: Number
+    } 
+}, {
+    _id:false
+})
+
 
 const userSchema = mongoose.Schema({
     firstName: {
@@ -71,7 +93,7 @@ const userSchema = mongoose.Schema({
     },
     teaching: [lessonSchema],
     
-    enrolled: [lessonSchema]
+    enrolled: [enrollmentSchema]
 });
 userSchema.methods.generateAuthToken = async function() {
     const user = this
