@@ -11,6 +11,7 @@
     "dotenv": "^8.2.0",
     "email-validator": "^2.0.4",
     "js-cookie": "^2.2.1",
+    "microsoft-cognitiveservices-speech-sdk": "^1.14.1",
     "node-sass": "^4.14.1",
     "normalize.css": "^8.0.1",
     "react": "^16.14.0",

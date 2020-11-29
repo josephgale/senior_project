@@ -72,7 +72,7 @@ const Enroll = () => {
     return(
         <Layout>
             <h1>Enrollment page</h1>
-            <ul><lh>Enrollment Options</lh>
+            <ul>Enrollment Options
             {
                 values.enrollmentOptions.map((each)=>
                     <li key={each.lesson_id}>
