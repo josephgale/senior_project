@@ -27,6 +27,7 @@ const Layout = (props) => {
                 {!isLoggedIn?<LinkStyled to="/login" className="text-light">Login</LinkStyled>:
                 <LinkStyled to="/login" className="text-light" onClick={handleLogout}>Log out</LinkStyled>}
                 {!isLoggedIn?<LinkStyled to="/signup" className="text-light">Signup</LinkStyled>:""}
+                {isLoggedIn?<LinkStyled to="/dashboard" className="text-light">Dashboard</LinkStyled>:""}
             </li>
         </ul>
     );

@@ -9,7 +9,7 @@ const Enrollment = () => {
         enrolled:[],
     })
 
-    //useEffect will populate initital enrollment list and update as user enrolls in classes
+    //useEffect will populate initital enrollment list and update as user enrolls in classes, since getEnrolledLessons() changes state
     useEffect(() => { 
         getEnrolledLessons()       
       }, []);
@@ -21,6 +21,19 @@ const Enrollment = () => {
     //prep history
     const history = useHistory();
     const toEnrollmentPage = () => history.push('/enroll')
+    const toDoLessonPage = (lessonObject) => {
+        console.log("do lesson fx object",lessonObject)
+        history.push(
+            {
+                pathname: '/doLesson',
+                state:{
+                    lessonId: lessonObject.lesson_id,
+                    completed: lessonObject.completed,
+                    score: lessonObject.score
+                }
+            }
+        )
+    }
 
     const getEnrolledLessons =()=>{ 
         Axios(
@@ -32,6 +45,7 @@ const Enrollment = () => {
         )
         .then((res)=>
             { 
+                console.log('enrolled array ', res.data)
                 setValues({values,enrolled: res.data})
                 //console.log('Returned data from getEnrollmentOptions:',res.data)
             }
@@ -47,8 +61,8 @@ const Enrollment = () => {
             {
                 values.enrolled.map((each)=>
                     <li key={each.lesson_id}>
-                        {each.teacher} --- {each.lessonName}
-                        <button>Start or Resume Lesson</button>
+                        {each.teacher} --- {each.lessonName} --- {each.completed} --- {each.score}
+                        <button onClick={()=>toDoLessonPage(each)}>Start or Resume Lesson</button>
                     </li>
                 )
             }

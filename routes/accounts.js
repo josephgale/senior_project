@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user')
 //controllers
-const {signup,activate,pwResetRequest,pwReset,googleLogin,login,newLesson,getLessons,updateLesson,deleteLesson,getEnrollmentOptions,enroll,getEnrolledLessons} = require('../controllers/auth')
+const {signup,activate,pwResetRequest,pwReset,googleLogin,login,newLesson,getLessons,updateLesson,deleteLesson,getEnrollmentOptions,enroll,getEnrolledLessons,getLessonById} = require('../controllers/auth')
 
 router.post('/signup',signup);
 router.post('/activate',activate);
@@ -17,6 +17,7 @@ router.post('/deleteLesson',deleteLesson)
 router.post('/getEnrollmentOptions',getEnrollmentOptions)
 router.post('/getEnrolledLessons',getEnrolledLessons)
 router.post('/enroll',enroll)
+router.post('/getLessonById',getLessonById)
 
 //find user by email
 router.post('/checkEmail', async (req,res)=>{

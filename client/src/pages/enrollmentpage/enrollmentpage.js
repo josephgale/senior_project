@@ -27,6 +27,7 @@ const Enroll = () => {
             {
             method: 'POST',
             url: '/api/getEnrollmentOptions',
+            //email being sent so that all lessons not including submitting user are returned
             data: {email}
             }
         )

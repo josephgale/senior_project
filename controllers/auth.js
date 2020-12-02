@@ -4,6 +4,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const User = require('../models/user')
 const Lesson = require('../models/user')
 const {OAuth2Client} = require('google-auth-library')
+const ObjectId = require("mongodb").ObjectID
 
 //send email link for account creation
 exports.signup = async (req,res)=>{    
@@ -374,7 +375,7 @@ exports.getEnrolledLessons = async (req,res) => {
     console.log('getEnrolledLessons hit!')
     const user = await User.find({email: req.body.email})
     //User.find returns an array with one object, map that object to create to array to filter all enrollments
-    const enrolledArray = user[0].enrolled.map((each)=>each)  
+    const enrolledArray = user[0].enrolled.map((each)=>each) 
     res.send(enrolledArray)  
 
 }
@@ -405,5 +406,22 @@ exports.enroll = (req,res) => {
             return res.status(200).send(doc)
         }
     })
+}
+
+exports.getLessonById = async (req,res) => {
+
+    await User.find(
+        {'teaching._id': req.body.lessonId},
+            {'teaching':
+                {$elemMatch:{_id:req.body.lessonId}
+            } 
+        },
+        (err,post)=>
+            {
+                console.log('here is the retreived info:', post) 
+                err?res.send('error!'):res.send(post[0].teaching[0])
+            }
+    )
+
 }
 
