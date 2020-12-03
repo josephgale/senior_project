@@ -36,23 +36,23 @@ const Enrollment = () => {
                     console.log('questions completed: ', values.completed)
                     currentQuestion = res.data.question1
                     correctAnswer = res.data.answer1
+
+                    //history.push nested here because correctAnswer not rendering on next page 
+                    history.push(
+                        {
+                            pathname: '/doLesson',
+                            state:{
+                                lessonId: lessonObject.lesson_id,
+                                completed: lessonObject.completed,
+                                score: lessonObject.score,
+                                currentQuestion,
+                                correctAnswer
+                            }
+                        }
+                    )
                 }
             )
             .catch((e)=>console.log('Problem retrieving this lesson from API: ', e)) 
-
-        //use lesson_id to retrieve current question and display on next page  
-        history.push(
-            {
-                pathname: '/doLesson',
-                state:{
-                    lessonId: lessonObject.lesson_id,
-                    completed: lessonObject.completed,
-                    score: lessonObject.score,
-                    currentQuestion,
-                    correctAnswer
-                }
-            }
-        )
     }
 
     const getEnrolledLessons =()=>{ 

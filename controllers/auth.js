@@ -432,3 +432,7 @@ exports.getLessonById = async (req,res) => {
 
 }
 
+exports.updateLessonProgress = (req,res) => {
+    console.log('update lesson progress was hit')
+}
+

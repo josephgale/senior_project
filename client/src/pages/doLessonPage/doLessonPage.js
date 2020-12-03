@@ -12,7 +12,9 @@ const DoLesson = (props) => {
         completed: props.location.state.completed,
         score: props.location.state.score,
         currentQuestion: props.location.state.currentQuestion,
-        correctAnswer: props.location.state.correctAnswer
+        currentAnswer: '',
+        correctAnswer: props.location.state.correctAnswer.toLowerCase(),
+        gotCorrect: ''
     })
 
     //update state every time user completes a question
@@ -50,18 +52,13 @@ const DoLesson = (props) => {
         //render lesson info on a form
     }
 
-    const checkAnswer = (questionNumber, answerValue) => {
+    const checkAnswer = () => {
         //ajax call to lesson_id from state
         //compare lesson object question/answer with questionNumber,answerValue
     }
     //set history/routing  
     const history = useHistory()
     const toDashboard = () => history.push('/dashboard')
-
-    const submitHandler = (e) => {
-        e.preventDefault()
-        console.log('Here is what was submitted for form: ', e)
-    }
 
     //functions for microphone / azure api
     let micInput
@@ -70,12 +67,61 @@ const DoLesson = (props) => {
         let recognizer = new sdk.SpeechRecognizer(speechConfig, audioConfig);
         
         recognizer.recognizeOnceAsync(result => {
-            micInput = result.text
+            //this api occaisonally adds a period, so take off last character
+            if(result.text.charAt(result.text.length-1)==='.'){
+                micInput = result.text.slice(0,-1)
+            }else{
+                micInput = result.text
+            }
+
             //add text to current answer in state
-            setValues({values,correctAnswer: result.text})
-            
-            console.log(micInput)
+            setValues({...values,currentAnswer: micInput.toLowerCase()})
         });
+    }
+
+    //form functions
+    const handleChange = (e) => {
+        setValues({...values,currentAnswer:e.target.value})
+    }
+
+    //check answer
+    let errorMessage
+    const submitHandler = (e) => {
+        e.preventDefault()
+        console.log('values to compare: ', values.currentAnswer, values.correctAnswer)
+        if(!values.currentAnswer === values.correctAnswer){
+            setValues({...values,gotCorrect:'false'})
+        }else{
+            //trigger success message
+            setValues({...values,gotCorrect:'true'})
+
+            //update state so proper question can render next
+            const completed = values.completed + 1
+            setValues({...values,completed:completed })
+            
+            //get user id from local storage to authenticate API call
+            const user = localStorage.getItem('user')
+            const email = JSON.parse(user).email 
+
+            //update database with completed +1
+            Axios(
+                {
+                    method: 'POST',
+                    url: '/api/updateLessonProgress',
+                    data: {
+                        email,
+                        lessonId:values.lessonId,
+                        completed:values.completed
+                    }
+                }
+            )
+            .then((res)=>
+                { 
+                    console.log('axios then response')
+                }
+            )
+            .catch((e)=>console.log('Problem retrieving all lessons from API: ', e))   
+        }
     }
 
     const doLessonForm = () => (
@@ -86,24 +132,26 @@ const DoLesson = (props) => {
             </div>
             <div className="form-group">
                 <label>Your Answer</label>
-                <input className="form-control" type="hidden" name="lessonName" value={values.correctAnswer}/>
+                <input className="form-control" name="lessonName" value={values.currentAnswer} onChange={handleChange}/>
             </div>
             <div>
             <button type='button' onClick={fromMic}>Record your Answer</button>
-            </div>
+            </div>            
             <div className="form-group">
                 <input type="submit" value="Check Answer" />
+                <p style={{color:"red"}}>{values.gotCorrect=='false'? 'Sorry, try again': values.gotCorrect=='true'?'Correct!':''}</p>
+            </div>
+            <div>
+            <button type='button' onClick={console.log('going to next quesiton')}>Go to next question</button>
             </div>
         </Form>
     )
     return(
-        <Layout>
-           
-            {/* {renderQuestion(values.lessonId)} */}
+        <Layout>           
             <h1>Do Lesson Page</h1>
-            <button onClick={()=>renderQuestion(values.lessonId)}>Render Question</button>
             {doLessonForm()}
-            <button onClick={toDashboard}>To Dashboard</button>            
+            <button onClick={toDashboard}>To Dashboard</button>      
+            {console.log('on render, here are values of state: ', values)}      
         </Layout>
         
     )
