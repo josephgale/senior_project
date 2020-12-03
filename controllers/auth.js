@@ -409,6 +409,7 @@ exports.enroll = (req,res) => {
 }
 
 exports.getLessonById = async (req,res) => {
+    console.log('Here is the full request from getLessonById: ', req.body)
 
     await User.find(
         {'teaching._id': req.body.lessonId},

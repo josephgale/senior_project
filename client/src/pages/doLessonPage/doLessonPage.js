@@ -11,8 +11,8 @@ const DoLesson = (props) => {
         lessonId: props.location.state.lessonId,
         completed: props.location.state.completed,
         score: props.location.state.score,
-        currentQuestion: 'What is the meaning of life?',
-        currentAnswer: ''
+        currentQuestion: props.location.state.currentQuestion,
+        correctAnswer: props.location.state.correctAnswer
     })
 
     //update state every time user completes a question
@@ -72,7 +72,7 @@ const DoLesson = (props) => {
         recognizer.recognizeOnceAsync(result => {
             micInput = result.text
             //add text to current answer in state
-            setValues({values,currentAnswer: result.text})
+            setValues({values,correctAnswer: result.text})
             
             console.log(micInput)
         });
@@ -86,7 +86,7 @@ const DoLesson = (props) => {
             </div>
             <div className="form-group">
                 <label>Your Answer</label>
-                <input className="form-control" type="text" name="lessonName" value={values.currentAnswer}/>
+                <input className="form-control" type="hidden" name="lessonName" value={values.correctAnswer}/>
             </div>
             <div>
             <button type='button' onClick={fromMic}>Record your Answer</button>

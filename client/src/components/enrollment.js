@@ -6,12 +6,12 @@ const Enrollment = () => {
 
     //create state so that once user enrolls in class it disappears from available options
     const [values, setValues] = useState({
-        enrolled:[],
+        enrolled:[]
     })
 
     //useEffect will populate initital enrollment list and update as user enrolls in classes, since getEnrolledLessons() changes state
     useEffect(() => { 
-        getEnrolledLessons()       
+        getEnrolledLessons() 
       }, []);
 
     //get user id from local storage to authenticate API call
@@ -21,35 +21,35 @@ const Enrollment = () => {
     //prep history
     const history = useHistory();
     const toEnrollmentPage = () => history.push('/enroll')
+    
     const toDoLessonPage = async (lessonObject) => {
-        //use lesson_id to retrieve current question and display on next page
+       let currentQuestion, correctAnswer
         await Axios(
-            {
-            method: 'POST',
-            url: '/api/getLessonById',
-            data: {lessonId:lessonObject.lessonId}
-            }
-        )
-        .then((res)=>
-            { 
-                console.log('enrolled array ', res.data)
-                console.log('questions completed: ', values.completed)
-                if(values.completed==0){
-                    setValues({values,currentQuestion: res.data.question1})
+                {
+                method: 'POST',
+                url: '/api/getLessonById',
+                data: {lessonId:lessonObject.lesson_id}
                 }
-                //if values.completed==0, then values.currentQuestion=
+            )
+            .then((res)=>
+                { 
+                    console.log('questions completed: ', values.completed)
+                    currentQuestion = res.data.question1
+                    correctAnswer = res.data.answer1
+                }
+            )
+            .catch((e)=>console.log('Problem retrieving this lesson from API: ', e)) 
 
-            }
-        )
-        .catch((e)=>console.log('Problem retrieving this lesson from API: ', e)) 
-        console.log("do lesson fx object",lessonObject)
+        //use lesson_id to retrieve current question and display on next page  
         history.push(
             {
                 pathname: '/doLesson',
                 state:{
                     lessonId: lessonObject.lesson_id,
                     completed: lessonObject.completed,
-                    score: lessonObject.score
+                    score: lessonObject.score,
+                    currentQuestion,
+                    correctAnswer
                 }
             }
         )
@@ -58,16 +58,14 @@ const Enrollment = () => {
     const getEnrolledLessons =()=>{ 
         Axios(
             {
-            method: 'POST',
-            url: '/api/getEnrolledLessons',
-            data: {email}
+                method: 'POST',
+                url: '/api/getEnrolledLessons',
+                data: {email}
             }
         )
         .then((res)=>
             { 
-                console.log('enrolled array ', res.data)
-                setValues({values,enrolled: res.data})
-                //console.log('Returned data from getEnrollmentOptions:',res.data)
+                setValues({...values,enrolled: res.data})
             }
         )
         .catch((e)=>console.log('Problem retrieving all lessons from API: ', e))        
@@ -86,6 +84,7 @@ const Enrollment = () => {
                     </li>
                 )
             }
+
         </div>
     )
 }
