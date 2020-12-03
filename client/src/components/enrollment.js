@@ -21,7 +21,27 @@ const Enrollment = () => {
     //prep history
     const history = useHistory();
     const toEnrollmentPage = () => history.push('/enroll')
-    const toDoLessonPage = (lessonObject) => {
+    const toDoLessonPage = async (lessonObject) => {
+        //use lesson_id to retrieve current question and display on next page
+        await Axios(
+            {
+            method: 'POST',
+            url: '/api/getLessonById',
+            data: {lessonId:lessonObject.lessonId}
+            }
+        )
+        .then((res)=>
+            { 
+                console.log('enrolled array ', res.data)
+                console.log('questions completed: ', values.completed)
+                if(values.completed==0){
+                    setValues({values,currentQuestion: res.data.question1})
+                }
+                //if values.completed==0, then values.currentQuestion=
+
+            }
+        )
+        .catch((e)=>console.log('Problem retrieving this lesson from API: ', e)) 
         console.log("do lesson fx object",lessonObject)
         history.push(
             {

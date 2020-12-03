@@ -2,20 +2,23 @@ import React, {useEffect,useState} from 'react'
 import Layout from '../../components/layout'
 import {useHistory,withRouter} from 'react-router-dom'
 import Axios from 'axios'
+import {Form} from '../signuppage/signup.styles'
+const sdk = require("microsoft-cognitiveservices-speech-sdk");
+const speechConfig = sdk.SpeechConfig.fromSubscription("e1f8581561cb4f75a9da97c1bcdba067", "eastus");
 
 const DoLesson = (props) => {
     const [values, setValues] = useState({
         lessonId: props.location.state.lessonId,
         completed: props.location.state.completed,
         score: props.location.state.score,
-        currentQuestion: '',
+        currentQuestion: 'What is the meaning of life?',
         currentAnswer: ''
     })
 
     //update state every time user completes a question
-    useEffect(() => { 
-        updateLessonProgress()       
-      }, []);
+    // useEffect(() => { 
+    //     updateLessonProgress()       
+    //   }, []);
 
     //take current question and update to database
     const updateLessonProgress = () =>{
@@ -36,6 +39,9 @@ const DoLesson = (props) => {
             { 
                 console.log('enrolled array ', res.data)
                 console.log('questions completed: ', values.completed)
+                if(values.completed==0){
+                    setValues({values,currentQuestion: res.data.question1})
+                }
                 //if values.completed==0, then values.currentQuestion=
 
             }
@@ -51,13 +57,53 @@ const DoLesson = (props) => {
     //set history/routing  
     const history = useHistory()
     const toDashboard = () => history.push('/dashboard')
+
+    const submitHandler = (e) => {
+        e.preventDefault()
+        console.log('Here is what was submitted for form: ', e)
+    }
+
+    //functions for microphone / azure api
+    let micInput
+    function fromMic() {
+        let audioConfig = sdk.AudioConfig.fromDefaultMicrophoneInput();
+        let recognizer = new sdk.SpeechRecognizer(speechConfig, audioConfig);
+        
+        recognizer.recognizeOnceAsync(result => {
+            micInput = result.text
+            //add text to current answer in state
+            setValues({values,currentAnswer: result.text})
+            
+            console.log(micInput)
+        });
+    }
+
+    const doLessonForm = () => (
+        <Form onSubmit={submitHandler}>
+            <div className="form-group">
+                <label>Current Question</label>
+                <input className="form-control" type="text" name="lessonName" value={values.currentQuestion}/>
+            </div>
+            <div className="form-group">
+                <label>Your Answer</label>
+                <input className="form-control" type="text" name="lessonName" value={values.currentAnswer}/>
+            </div>
+            <div>
+            <button type='button' onClick={fromMic}>Record your Answer</button>
+            </div>
+            <div className="form-group">
+                <input type="submit" value="Check Answer" />
+            </div>
+        </Form>
+    )
     return(
         <Layout>
+           
+            {/* {renderQuestion(values.lessonId)} */}
             <h1>Do Lesson Page</h1>
-            <button onClick={toDashboard}>To Dashboard</button>
             <button onClick={()=>renderQuestion(values.lessonId)}>Render Question</button>
-            {renderQuestion()}
-            {console.log(props.location.state)}
+            {doLessonForm()}
+            <button onClick={toDashboard}>To Dashboard</button>            
         </Layout>
         
     )

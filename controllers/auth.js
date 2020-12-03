@@ -413,13 +413,19 @@ exports.getLessonById = async (req,res) => {
     await User.find(
         {'teaching._id': req.body.lessonId},
             {'teaching':
-                {$elemMatch:{_id:req.body.lessonId}
+                {$elemMatch:{_id:req.body.lessonId} 
             } 
         },
         (err,post)=>
             {
                 console.log('here is the retreived info:', post) 
-                err?res.send('error!'):res.send(post[0].teaching[0])
+                if(post.length<1){
+                    console.log('The array is empty')
+                    res.send(post)
+                } else {
+                    err?res.send('error!'):res.send(post[0].teaching[0])
+                }
+                
             }
     )
 
