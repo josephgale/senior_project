@@ -13,6 +13,7 @@ import NewLesson from '../pages/newlessonpage/newlessonpage'
 import EditLesson from '../pages/editlessonpage/editlessonpage'
 import Enrollment from '../pages/enrollmentpage/enrollmentpage'
 import DoLesson from '../pages/doLessonPage/doLessonPage'
+import AccountPage from '../pages/accountpage/accountpage'
 
 const Routes = () => {
     return(
@@ -30,6 +31,7 @@ const Routes = () => {
                 <PrivateRoute path='/editLesson' component={EditLesson}/>
                 <PrivateRoute path='/enroll' component={Enrollment}/>
                 <PrivateRoute path='/doLesson' component={DoLesson}/>
+                <PrivateRoute path='/account' component={AccountPage}/>
             </Switch>
         </BrowserRouter>
     )

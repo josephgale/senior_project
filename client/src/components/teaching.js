@@ -1,6 +1,7 @@
 import React, {useEffect,useState} from 'react'
 import {useHistory} from 'react-router-dom'
 import Axios from 'axios'
+import Students from './students'
 
 const Teaching = (props) => {   
         
@@ -91,6 +92,7 @@ const Teaching = (props) => {
                 }
             </ul>
             <button onClick={toAddLesson}>Create a New Lesson</button>
+            <Students />
         </div>
        
 

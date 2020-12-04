@@ -19,7 +19,8 @@ const Layout = (props) => {
         removeLocalStorage('user')
         history.push("/login")
     }
-        
+
+      
     const nav = () => (
         <ul className = "nav nav-tabs bg-primary">
             <li className="nav-item">
@@ -28,6 +29,7 @@ const Layout = (props) => {
                 <LinkStyled to="/login" className="text-light" onClick={handleLogout}>Log out</LinkStyled>}
                 {!isLoggedIn?<LinkStyled to="/signup" className="text-light">Signup</LinkStyled>:""}
                 {isLoggedIn?<LinkStyled to="/dashboard" className="text-light">Dashboard</LinkStyled>:""}
+                {isLoggedIn?<LinkStyled to="/account" className="text-light">Account</LinkStyled>:""}
             </li>
         </ul>
     );

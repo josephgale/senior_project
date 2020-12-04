@@ -432,7 +432,74 @@ exports.getLessonById = async (req,res) => {
 
 }
 
-exports.updateLessonProgress = (req,res) => {
-    console.log('update lesson progress was hit')
+exports.nextQuestion = (req,res) => {
+    console.log('next question function called: ', req.body) 
+    //receive completed item, then mongodb update, then return next question and answer
+    //res.send(user)  
+    
+    User.findOneAndUpdate(        
+        { "email":req.body.email, "enrolled.lesson_id":req.body.lessonId},
+        { $set: 
+            {
+            'enrolled.$.completed': req.body.completed,
+            'enrolled.$.score': req.body.score
+            }
+        }
+    )
+    .exec((err,doc)=>
+        {
+            if(err){
+                console.log('There was an error updating user enrolled lesson',doc)
+                return res.status(400).send(err)
+            }else{
+                console.log('Possible success in updating enrolled lesson')
+                return res.status(200).send("Possible success in updating enrolled lesson") 
+            }
+        }
+    )
+   
 }
 
+//this function returns all students and all their enrolled lessons for the requesting teacher; further filtering of non-teacher classes needed in client
+exports.getEnrolledStudents = (req,res) =>{
+    console.log('find students hit!!', req.body)  
+    //res.send(req.body.user)
+    User.find(
+        //{"name": {$ne:req.body.user}},  
+         //{"enrolled.teacher": req.body.user}, 
+         {"enrolled":
+            {
+                $elemMatch:
+                    {
+                        teacher:req.body.teacher
+                    }
+            } 
+        },
+        //add projection object which filters results   
+        {"name":1,"enrolled":1}      
+        )
+        .exec(
+            (err,post)=>
+                {
+                    if(err){
+                            res.send('Error finding students!')
+                    }else{
+                        console.log('enrolled student data: ', post)
+                        res.send(post)
+                    }
+                }
+        )
+
+}
+exports.updateAccountInfo = (req,res) => { 
+    console.log('update account info req',req.body.id)
+    User.findByIdAndUpdate(
+        {_id:req.body.id},
+        {name: req.body.name,email:req.body.email,password:req.body.password},
+        {upsert: true}
+    ).exec((err,post)=>err?res.send('Account information not updated'):res.send(post))
+}
+
+exports.deleteAccount = (req,res)=>{
+    console.log('delete account function hit')
+}

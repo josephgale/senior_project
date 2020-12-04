@@ -3,15 +3,21 @@ import axios from 'axios';
 
 
 export const ValidateFields=(values,setValues)=>{
+    //for updating account info, get local storage so no error if localstorage==currentEmail
+    const user = localStorage.getItem('user')
+    const currentEmail = JSON.parse(user).email
+    
     //firstName
-    if(!values.firstName){
+    //set !user because first/last name got combined after this validation was created
+    if(!values.firstName&&(!user)){
         setValues(values=>({...values,errors:{...values.errors,firstName:"Please provide a first name"}}))
     }else{
         setValues(values=>({...values,errors:{...values.errors,firstName:""}}))
     }
 
     //lastName
-    if(!values.lastName){
+    //set !user because first/last name got combined after this validation was created
+    if(!values.lastName&&(!user)){
         setValues(values=>({...values,errors:{...values.errors,lastName:"Please provide a last name"}}))
     }else{
         setValues(values=>({...values,errors:{...values.errors,lastName:""}}))
@@ -24,6 +30,7 @@ export const ValidateFields=(values,setValues)=>{
          setValues(values=>({...values,errors:{...values.errors,email:""}}))
     }
 
+
     //check if email already exists in database
     axios({
         method: 'post',
@@ -33,7 +40,7 @@ export const ValidateFields=(values,setValues)=>{
         }
     })
     .then((res)=>{
-        if(res.data.emailFound){
+        if(res.data.emailFound&&(currentEmail!=values.email)){
             setValues(values=>({...values,errors:{...values.errors,emailFound:'You cannot use this address'}})) 
         }else{
             setValues(values=>({...values,errors:{...values.errors,emailFound:''}}))  

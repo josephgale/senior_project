@@ -13,19 +13,14 @@ const DoLesson = (props) => {
         score: props.location.state.score,
         currentQuestion: props.location.state.currentQuestion,
         currentAnswer: '',
-        correctAnswer: props.location.state.correctAnswer.toLowerCase(),
+        correctAnswer: props.location.state.correctAnswer,
         gotCorrect: ''
     })
 
     //update state every time user completes a question
-    // useEffect(() => { 
-    //     updateLessonProgress()       
-    //   }, []);
-
-    //take current question and update to database
-    const updateLessonProgress = () =>{
-        console.log('Updating lesson')
-    }
+    useEffect(() => { 
+        renderQuestion()     
+      }, [values.completed]);
 
     const renderQuestion = (lessonId) => {
         console.log('The question has been rendered')
@@ -34,7 +29,7 @@ const DoLesson = (props) => {
             {
             method: 'POST',
             url: '/api/getLessonById',
-            data: {lessonId}
+            data: {lessonId:values.lessonId}
             }
         )
         .then((res)=>
@@ -42,9 +37,19 @@ const DoLesson = (props) => {
                 console.log('enrolled array ', res.data)
                 console.log('questions completed: ', values.completed)
                 if(values.completed==0){
-                    setValues({values,currentQuestion: res.data.question1})
+                    setValues({...values,currentQuestion: res.data.question1})
                 }
-                //if values.completed==0, then values.currentQuestion=
+                if(values.completed==1){
+                    setValues({...values,currentQuestion: res.data.question2})
+                }
+                if(values.completed==2){
+                    setValues({...values,currentQuestion: res.data.question3})
+                }
+                if(values.completed>2){
+                    setValues({...values,currentQuestion: res.data.question3})
+                }
+
+                
 
             }
         )
@@ -52,10 +57,6 @@ const DoLesson = (props) => {
         //render lesson info on a form
     }
 
-    const checkAnswer = () => {
-        //ajax call to lesson_id from state
-        //compare lesson object question/answer with questionNumber,answerValue
-    }
     //set history/routing  
     const history = useHistory()
     const toDashboard = () => history.push('/dashboard')
@@ -85,43 +86,59 @@ const DoLesson = (props) => {
     }
 
     //check answer
-    let errorMessage
+    let score = values.score //not sure if state is needed, or if this will be consistent with other questions
     const submitHandler = (e) => {
         e.preventDefault()
         console.log('values to compare: ', values.currentAnswer, values.correctAnswer)
-        if(!values.currentAnswer === values.correctAnswer){
+        if(values.currentAnswer.toLowerCase() != values.correctAnswer.toLowerCase()){
             setValues({...values,gotCorrect:'false'})
         }else{
             //trigger success message
-            setValues({...values,gotCorrect:'true'})
+            score += 1
+            setValues({...values,gotCorrect:'true',score:score})
+        }
+    }
 
+    const goToNextQuestion = () => {
+            if(values.completed==3){
+                //set message that lesson is complete and return to dashboard
+                console.log('Lesson is complete')
+            }else{
             //update state so proper question can render next
             const completed = values.completed + 1
-            setValues({...values,completed:completed })
+                       
             
             //get user id from local storage to authenticate API call
             const user = localStorage.getItem('user')
             const email = JSON.parse(user).email 
 
-            //update database with completed +1
+            //update score in db and retrieve next question
             Axios(
                 {
                     method: 'POST',
-                    url: '/api/updateLessonProgress',
+                    url: '/api/nextQuestion',
                     data: {
                         email,
                         lessonId:values.lessonId,
-                        completed:values.completed
+                        completed:completed,
+                        score: score
+                        
                     }
                 }
             )
             .then((res)=>
                 { 
-                    console.log('axios then response')
+                    console.log('here is the response',res)
+                    //setValues of question and answer, tie a render fx to useEffect
+                    setValues({...values,completed:completed }) 
+                    
+                    
                 }
             )
-            .catch((e)=>console.log('Problem retrieving all lessons from API: ', e))   
-        }
+            .catch((e)=>console.log('Problem retrieving all lessons from API: ', e))  
+            }
+             
+        
     }
 
     const doLessonForm = () => (
@@ -132,17 +149,21 @@ const DoLesson = (props) => {
             </div>
             <div className="form-group">
                 <label>Your Answer</label>
+                <div>
+                    <button type='button' onClick={fromMic}>Record your Answer</button>
+                </div>
                 <input className="form-control" name="lessonName" value={values.currentAnswer} onChange={handleChange}/>
             </div>
-            <div>
-            <button type='button' onClick={fromMic}>Record your Answer</button>
-            </div>            
+                        
             <div className="form-group">
                 <input type="submit" value="Check Answer" />
                 <p style={{color:"red"}}>{values.gotCorrect=='false'? 'Sorry, try again': values.gotCorrect=='true'?'Correct!':''}</p>
+                <p>{console.log(values)}</p>
             </div>
             <div>
-            <button type='button' onClick={console.log('going to next quesiton')}>Go to next question</button>
+            <button type='button' onClick={goToNextQuestion}>Go to next question</button>
+            <p style={{color:"red"}}>{values.completed>2?'Lesson is complete':''}</p>
+
             </div>
         </Form>
     )
@@ -151,7 +172,7 @@ const DoLesson = (props) => {
             <h1>Do Lesson Page</h1>
             {doLessonForm()}
             <button onClick={toDashboard}>To Dashboard</button>      
-            {console.log('on render, here are values of state: ', values)}      
+            {console.log('on render, here are values of state: ', values)}               
         </Layout>
         
     )
