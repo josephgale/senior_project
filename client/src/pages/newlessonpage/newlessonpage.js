@@ -20,7 +20,6 @@ const NewLesson = () => {
                 id,
                 email,
                 lessonName: e.target.lessonName.value,
-                asset: e.target.asset.value,
                 question1: e.target.question1.value,
                 answer1: e.target.answer1.value,
                 question2: e.target.question2.value,
@@ -43,10 +42,6 @@ const NewLesson = () => {
             <div className="form-group">
                 <label>Lesson Title</label>
                 <input className="form-control" type="text" name="lessonName"/>
-            </div>
-            <div className="form-group">
-                <label>Asset</label><br></br>
-                <input type="file" name="asset"></input>
             </div>
             <div className="form-group">
                 <label>Question 1</label>

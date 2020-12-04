@@ -12,9 +12,9 @@ const SignupPage = () =>{
         email: "",
         password1: "",
         password2: "",
-        role: "student",
         errors:{
-        }
+        },
+        success: ''
     });
 
     //validate client-side in real-time
@@ -56,6 +56,8 @@ const SignupPage = () =>{
                     password:values.password1,
                     role: values.role
                 }
+            }).then((res)=>{
+                setValues({...values,success:'Please check your email '})
             });
             console.log('form was submitted:',values)
             }
@@ -92,17 +94,11 @@ const SignupPage = () =>{
                 <p style={{color:"red"}}>{values.errors['password2']? values.errors['password2']: values.errors['matchPasswords']? values.errors['matchPasswords']: ''}</p>
 
             </div>
-            {/* <div className="form-group">
-                <label>Account type</label>
-                <br></br>
-                <SelectBox className="browser-default custom-select" name="role" onChange={handleChange('role')}>
-                    <option value="student">Student</option>
-                    <option value="instructor">Instructor</option>
-                </SelectBox>
-            </div> */}
+
             <div className="form-group">
                 <Input className="btn-danger" type='submit' value="Sign up"/>
                 <p style={{color:"red",fontSize:22}}>{values.errors['submit']? values.errors['submit']: ''}</p>
+                <p style={{color:"red",fontSize:30}}>{values.success? values.success: ''}</p>
 
             </div>
         </Form>

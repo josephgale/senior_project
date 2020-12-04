@@ -5,7 +5,10 @@ import axios from 'axios';
 export const ValidateFields=(values,setValues)=>{
     //for updating account info, get local storage so no error if localstorage==currentEmail
     const user = localStorage.getItem('user')
-    const currentEmail = JSON.parse(user).email
+    let currentEmail = values.email
+    if(user){currentEmail = JSON.parse(user).email}
+
+    
     
     //firstName
     //set !user because first/last name got combined after this validation was created

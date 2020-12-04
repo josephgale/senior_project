@@ -501,5 +501,8 @@ exports.updateAccountInfo = (req,res) => {
 }
 
 exports.deleteAccount = (req,res)=>{
-    console.log('delete account function hit')
-}
+    console.log('delete account function hit',req.body.id) 
+    User.findByIdAndDelete( 
+        {_id:req.body.id}
+    ).exec((err,post)=>err?res.send('Account was not deleted'):res.send('account deleted')) 
+} 

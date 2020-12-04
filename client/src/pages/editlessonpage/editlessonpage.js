@@ -38,14 +38,12 @@ const EditLesson = (props) => {
                 email,
                 originalName: myValues.originalName,
                 lessonName: myValues.lessonName,
-                asset: myValues.asset,
                 question1: myValues.question1,
                 answer1: myValues.answer1,
                 question2: myValues.question2,
                 answer2: myValues.answer2,
                 question3: myValues.question3,
-                answer3: myValues.answer3,
-
+                answer3: myValues.answer3
             }
         })
         .then(

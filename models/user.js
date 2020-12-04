@@ -6,9 +6,6 @@ const lessonSchema = mongoose.Schema({
     lessonName:{
         type: String
     },
-    asset:{
-        type: String
-    },
     question1:{
         type: String
     },

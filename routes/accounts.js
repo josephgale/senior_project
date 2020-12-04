@@ -47,12 +47,6 @@ router.get('/users',async (req,res)=>{
     } catch(e) {
         res.status(500).send("We had an error: ", e)
     }
-
-    // User.find({}).then((users)=>{
-    //         res.status(200).send(users)        
-    //     }).catch((e)=>{   
-    //         res.status(400).send() 
-    // })
 });
 
 //get user by id
@@ -92,18 +86,6 @@ router.patch('/users/:id',async (req,res)=>{
     }catch(e){
         res.status(500).send(e)
     }
-    // User.findByIdAndUpdate(_id,{email:"beebop"})
-    // .then((result1)=>{
-    //     return User.countDocuments({email:"none"}) 
-    // })
-    // .then((result2)=>{
-    //     //console.log(result2.rows[0])
-    //     res.status(200).send("Entries with no email: " + result2)   
-    // })
-    // .catch((e)=>{
-    //     console.log(e)
-    //     res.send("You had an error")  
-    // })
 })
 
 //delete user by id

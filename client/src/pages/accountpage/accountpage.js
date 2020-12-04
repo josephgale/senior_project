@@ -4,7 +4,8 @@ import {withRouter} from 'react-router-dom'
 import {Form} from '../signuppage/signup.styles'
 import Axios from 'axios'
 import {useHistory} from 'react-router-dom'
-import {ValidateFields} from '../../validation/validation';
+import {ValidateFields} from '../../validation/validation'
+import {getCookie,removeCookie,removeLocalStorage} from '../../validation/helpers'
 
 const Account = (props) => {
     //declare constants for history and initial state setup
@@ -58,7 +59,7 @@ const Account = (props) => {
                         id,
                         name: values.name,
                         email: values.email,
-                        password:values.password1
+                        password:values.password1 
                     }
                 }).then((res)=>{
                     setValues({...values,success: 'Information updated'})
@@ -66,6 +67,20 @@ const Account = (props) => {
             console.log('form was submitted:',values)
             }
         }
+    }
+
+    const deleteAccount = ()=>{
+        Axios({
+            method: 'post',
+            url:'/api/deleteAccount',
+            data:{
+                id
+            }
+        }).then((res)=>{
+            removeCookie('token')
+            removeLocalStorage('user')
+            history.push("/login")            
+        })
     }
 
     const editAccountForm = () => (
@@ -96,7 +111,7 @@ const Account = (props) => {
                 <p style={{color:"red",fontSize:22}}>{values.success? values.success: ''}</p>
             </div>
             <div className="form-group">
-                <button>Delete Account</button>
+                <button type='button' onClick={deleteAccount}>Delete Account</button>
             </div>
         </Form>
     )
