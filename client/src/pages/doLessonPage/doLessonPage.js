@@ -36,13 +36,13 @@ const DoLesson = (props) => {
             { 
                 console.log('enrolled array ', res.data)
                 console.log('questions completed: ', values.completed)
-                if(values.completed==0){
+                if(values.completed===0){
                     setValues({...values,currentQuestion: res.data.question1})
                 }
-                if(values.completed==1){
+                if(values.completed===1){
                     setValues({...values,currentQuestion: res.data.question2})
                 }
-                if(values.completed==2){
+                if(values.completed===2){
                     setValues({...values,currentQuestion: res.data.question3})
                 }
                 if(values.completed>2){
@@ -90,7 +90,7 @@ const DoLesson = (props) => {
     const submitHandler = (e) => {
         e.preventDefault()
         console.log('values to compare: ', values.currentAnswer, values.correctAnswer)
-        if(values.currentAnswer.toLowerCase() != values.correctAnswer.toLowerCase()){
+        if(values.currentAnswer.toLowerCase() !== values.correctAnswer.toLowerCase()){
             setValues({...values,gotCorrect:'false'})
         }else{
             //trigger success message
@@ -100,7 +100,7 @@ const DoLesson = (props) => {
     }
 
     const goToNextQuestion = () => {
-            if(values.completed==3){
+            if(values.completed===3){
                 //set message that lesson is complete and return to dashboard
                 console.log('Lesson is complete')
             }else{
@@ -145,7 +145,7 @@ const DoLesson = (props) => {
         <Form onSubmit={submitHandler}>
             <div className="form-group">
                 <label>Current Question</label>
-                <input className="form-control" type="text" name="lessonName" value={values.currentQuestion}/>
+                <input className="form-control" type="text" name="lessonName" value={values.currentQuestion} readOnly/>
             </div>
             <div className="form-group">
                 <label>Your Answer</label>
@@ -157,7 +157,7 @@ const DoLesson = (props) => {
                         
             <div className="form-group">
                 <input type="submit" value="Check Answer" />
-                <p style={{color:"red"}}>{values.gotCorrect=='false'? 'Sorry, try again': values.gotCorrect=='true'?'Correct!':''}</p>
+                <p style={{color:"red"}}>{values.gotCorrect==='false'? 'Sorry, try again': values.gotCorrect==='true'?'Correct!':''}</p>
                 <p>{console.log(values)}</p>
             </div>
             <div>

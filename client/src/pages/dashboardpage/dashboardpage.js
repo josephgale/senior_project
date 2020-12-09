@@ -38,8 +38,8 @@ const Dashboard = () => {
                     <div className="features-list-div">
                         <h1 className='h1mod-alt'>Notes on Lesson Component</h1>
                         <ul className='features-list'>
-                            <li>React hooks update state on on each keystroke</li>
-                            <li>UseEffect() hook triggers functions which make AJAX calls on each state update to validate each field, starting when the page renders.</li>
+                            <li>New Lessons immediately become available to all students</li>
+                            <li>Improvement Needed: Deleting a lesson does not auto update student enrollment</li>
                         </ul>
                     </div>
                 </Col>  

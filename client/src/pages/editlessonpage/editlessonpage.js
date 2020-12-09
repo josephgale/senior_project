@@ -67,10 +67,6 @@ const EditLesson = (props) => {
                 <input className="form-control" type="text" name="lessonName" value={myValues.lessonName} onChange={(e)=>handleChange(e.target.value,'lessonName')}/>
             </div>
             <div className="form-group">
-                <label>Asset</label><br></br>
-                <input type="file" name="asset" value={myValues.asset} onChange={(e)=>handleChange(e.target.value,'asset')}/>
-            </div>
-            <div className="form-group">
                 <label>Question 1</label>
                 <input className="form-control" type="text" name="question1" value={myValues.question1} onChange={(e)=>handleChange(e.target.value,'question1')}/>
             </div>

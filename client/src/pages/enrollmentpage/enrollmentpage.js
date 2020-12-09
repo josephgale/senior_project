@@ -72,17 +72,22 @@ const Enroll = () => {
 
     return(
         <Layout>
-            <h1>Enrollment page</h1>
-            <ul>Enrollment Options
+            <h1>Enrollment page</h1>            
+            <table>
+                <thead>
+                    <td>Instructor</td>
+                    <td>Lesson</td>
+                </thead>
             {
                 values.enrollmentOptions.map((each)=>
-                    <li key={each.lesson_id}>
-                        {each.teacher} --- {each.lessonName}
-                        <button onClick={()=>enroll(each)}>Enroll</button>
-                    </li>
+                    <tr key={each.lesson_id}>
+                        <td>{each.teacher}</td>
+                        <td>{each.lessonName}</td>
+                        <td><button onClick={()=>enroll(each)}>Enroll</button></td>
+                    </tr>
                 )
             }
-            </ul>
+            </table>
             <button onClick={toDashboard}>Return to dashboard</button>
         </Layout>
     )

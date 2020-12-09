@@ -12,7 +12,7 @@ const Enrollment = () => {
     //useEffect will populate initital enrollment list and update as user enrolls in classes, since getEnrolledLessons() changes state
     useEffect(() => { 
         getEnrolledLessons() 
-      }, []);
+      }, [values.enrolled]);
 
     //get user id from local storage to authenticate API call
     const user = localStorage.getItem('user')
@@ -33,15 +33,15 @@ const Enrollment = () => {
             )
             .then((res)=>
                 { 
-                    if(lessonObject.completed==0){
+                    if(lessonObject.completed===0){
                         currentQuestion = res.data.question1
                         correctAnswer = res.data.answer1
                     }
-                    if(lessonObject.completed==1){
+                    if(lessonObject.completed===1){
                         currentQuestion = res.data.question2
                         correctAnswer = res.data.answer2
                     }
-                    if(lessonObject.completed==2){
+                    if(lessonObject.completed===2){
                         currentQuestion = res.data.question3
                         correctAnswer = res.data.answer3
                     }

@@ -27,7 +27,6 @@ const Students = () => {
         )
         .then((res)=>
             { 
-                console.log('getEnrolledStudents response: ', res.data)
                 setValues({...values,students: res.data})
             }
         )
@@ -37,7 +36,6 @@ const Students = () => {
     return(
         <div className="dash-section">
             <h2>Your students:</h2>
-            {console.log('Here is the current state of students: ', values.students)}
             <table>
                 <thead>
                 <tr>
