@@ -1,0 +1,200 @@
+@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500&Indie+Flower&family=JetBrains+Mono:wght@500&family=Permanent+Marker&family=Russo+One&display=swap');
+h1{
+    display: block;
+}
+.rocket {
+    font-family: Russo One;
+    color:#CE3022;
+    font-size: 6em;
+    margin: 0;
+    padding: 0;
+    display: block;
+    margin-left: 10px;
+    background: -webkit-linear-gradient(#f3c5c3, #CE3022);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+}
+.h1mod {
+    font-family: Russo One;
+    font-style: italic;
+    font-size: 4em;
+    font-weight: 900;
+    background: -webkit-linear-gradient(#E2CE1F, #D38D1D);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    
+    display: block;
+    /* :#010101; */
+    
+}
+
+.h1mod-alt {
+    font-family: Russo One;
+    color: #006F8A;
+    font-size: 2em;
+    font-style: italic;
+}
+
+.h2mod {
+    font-family: JetBrains Mono;  
+    font-size: 2.8em;  
+    
+    
+}
+
+.h3mod {
+    font-size: 1.2em;
+    font-style: italic;
+   
+}
+
+.row {
+    padding-left: 3em;
+}
+#row2 {
+    background-color: rgba(0, 0, 0, 0.2);
+    padding-top: 2em;
+    
+}
+
+
+.row2 ul{
+    font-family: JetBrains Mono;    
+    /* color:black; */
+    list-style: none;
+    font-size: 1.7em;
+    text-align: right;
+    padding-right: 5em;
+    
+}
+
+.featuring {
+    font-family: Indie Flower;
+    font-style: italic;
+    font-size: 2.3em;
+}
+
+.features-list-div {
+    background-color:rgb(240, 225, 143,.8);
+    width: 75%;
+    padding: .5em;
+    border-radius: 1em;
+    
+}
+
+.features-list {
+    font-family: JetBrains Mono;
+    font-size: 1.25em;
+}
+.features-list li {
+    margin-bottom: 30px;
+}
+
+ 
+img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.check {
+    width: 1em;
+    margin-left: .5em;
+}
+
+.navbar {
+    background-color: #006F8A;
+    
+}
+
+.login-row{
+    padding-top: 2em;
+}
+
+
+#login-form-div {
+    /* background-color: red; */
+    width: 100%;
+    font-family: Russo One;
+    text-align: center;
+    width: 80%;
+    color: #003947
+}
+#login-form {
+    text-align: left;
+    font-family: Hind Siliguri;
+    
+    
+}
+.google-button {
+    width: 100%;
+    border-radius: 2em;
+
+}
+
+.google-message {
+    font-size: 2em;
+
+}
+
+/*Dashboard*/
+.h1-white{
+    color: white;
+    font-family: Russo One;
+}
+
+.dash-section {
+    background-color: #FFECBD;
+    border-radius: 2em;
+    padding: 1em;
+    margin-bottom: 2em;
+    width: 80%;
+}
+
+.dash-section h2 {
+    font-family: Hind Siliguri;
+}
+.welcome-message{
+    font-family: Hind Siliguri;
+    color: white;
+    font-style: italic;
+    width: 90%;
+    text-align: right;
+}
+.dash-button {
+    margin-top: .5em;
+    border-radius: .5em;
+    color:white;
+    background-color: #4791AE;
+}
+table {
+    text-align: right;
+}
+td,th {
+    padding: 5px;
+}
+
+
+
+
+
+
+
+
+@media screen and (max-width: 800px) {
+    .row2 ul{
+        padding-right: .4em;
+    }
+    ul li {
+        font-size: 18px;
+    }
+    .rocket {
+        font-size: 60px;
+    }
+    .h1mod {
+        font-size: 30px;
+    }
+    .h2mod,.h3mod{
+        color: white;
+    }
+}

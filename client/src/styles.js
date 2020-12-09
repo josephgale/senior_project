@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import img from '../../images/rocket-angle.png';
+import img from './images/space.jpg';
+
 
 export const Form = styled.form`
     background-color: #B6E2ED;
@@ -14,8 +15,8 @@ export const Form = styled.form`
 
 export const Body = styled.body`
     background: url(${img});
-    background-repeat: repeat;
-    height: 800px;
+    background-repeat: repeat-n;
+    height: 1200px;
     
 `;
 

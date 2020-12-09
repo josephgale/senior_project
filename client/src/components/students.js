@@ -14,7 +14,7 @@ const Students = () => {
 
     useEffect(() => { 
         //make api call and load state data on initial render    
-        //getEnrolledStudents()       
+        getEnrolledStudents()       
     }, []);
 
     const getEnrolledStudents =()=>{ 
@@ -35,37 +35,42 @@ const Students = () => {
     }
 
     return(
-        <div>
-            <h2>List of Students</h2>
-            <button onClick={getEnrolledStudents}>Get enrolled students</button>
+        <div className="dash-section">
+            <h2>Your students:</h2>
             {console.log('Here is the current state of students: ', values.students)}
-            {values.students.map
-                (
-                    (eachStudent)=>
-                        (
-                            
-                            eachStudent.enrolled.map
-                                (
-                                    (eachClass)=>
-                                        {
-                                            //only include classes by current teacher
-                                            if(eachClass.teacher==JSON.parse(user).name){
-                                                return (
-                                                    <li>
-                                                        {eachStudent.name} --- 
-                                                        {eachClass.lessonName} --- 
-                                                        {eachClass.completed} ---
-                                                        {eachClass.score}
-                                                    </li>
-                                                )
-                                            }
-                                            
-                                        }
+            <table>
+                <thead>
+                <tr>
+                    <th>Instructor</th>
+                    <th>Lesson</th>
+                    <th>Completed</th>
+                    <th>Score</th>
+                </tr>
+                </thead>
+                <tbody>
+            {
+                values.students.map((eachStudent)=>
+                    (eachStudent.enrolled.map((eachClass)=>
+                        {
+                            //only include classes by current teacher
+                            if(eachClass.teacher==JSON.parse(user).name){
+                                return (
+                                    <tr key={eachStudent.name + eachStudent.lessonName}>
+                                        <td>{eachStudent.name}</td>
+                                        <td>{eachClass.lessonName}</td> 
+                                        <td>{eachClass.completed}/3</td>
+                                        <td>{eachClass.score}/3</td>
+                                    </tr>
                                 )
+                            }
+                            
+                        }
                         )
+                    )
                 )
-            
             }
+            </tbody>
+            </table>
 
         </div>
         

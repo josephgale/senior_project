@@ -1,6 +1,9 @@
 import React,{useEffect, useState} from 'react';
 import Layout from '../../components/layout';
-import {Form,Input,Column,SelectBox} from './signup.styles';
+import {Body} from './signup.styles'
+import {Container,Row,Col} from 'react-bootstrap'
+import {Form,Input,Column} from '../../styles';
+import '../../App.css'
 import {ValidateFields} from '../../validation/validation';
 import axios from 'axios';
 
@@ -65,7 +68,7 @@ const SignupPage = () =>{
     }
 
     const signupForm = () => (
-        <Form onSubmit={submitHandler}>
+        <Form onSubmit={submitHandler} id="login-form">
             <div className="form-group">
                 <label >First Name</label>
                 <input className="form-control" type='text' onChange={handleChange('firstName')}/>
@@ -104,19 +107,29 @@ const SignupPage = () =>{
         </Form>
 );
     return(   
-        <Layout>            
-                <div className='container'>
-                    <div className='row'>
-                        <Column className="col-sm-12 col-md-6">
-                            <div>
-                                Sign up today for a free account 
-                            </div>
-                        </Column>
+        <Layout>  
+            <Body>          
+                <Container>
+                    <Row className="login-row">
+                        <Col>
+                            <div className="features-list-div">
+                                <h1 className='h1mod-alt'>Features of this form:</h1>
+                                <ul class='features-list'>
+                                    <li>React hooks update state on on each keystroke</li>
+                                    <li>UseEffect() hook triggers functions which make AJAX calls on each state update to validate each field, starting when the page renders.</li>
+                                    <li>A ternary operation is used to produce an error message if there is an error in the component state. On first render, errors for each field are produced</li>
+                                    <li>A webtoken associated with username/password is generated</li>
+                                    <li>SendGrid is used to send validation link and token to the email address.</li>
+                                    <li>Email validator and encrypted passwords used to prevent malicious entry</li>
+                                </ul>
+                            </div>                            
+                        </Col>
                         <Column className="col-sm-12 col-md-6">
                             {signupForm()}
                         </Column>
-                    </div>
-                </div>
+                    </Row>
+                </Container>
+            </Body>
         </Layout>
     )
 }

@@ -1,4 +1,6 @@
 import React from 'react';
+import {Form} from '../styles'
+import '../App.css'
 import {useHistory} from 'react-router-dom'
 import GoogleLogin from 'react-google-login';
 import axios from 'axios';
@@ -31,16 +33,14 @@ const Google = () => {
         })
     }
     return(
-        <div className = "pb-3">
-            <GoogleLogin
-                clientId={`${process.env.REACT_APP_GOOGLE_CLIENT_ID}`}
-                buttonText="Login"
-                onSuccess={responseGoogle}
-                onFailure={responseGoogle}
-                cookiePolicy={'single_host_origin'}
-            />
-            
-        </div>
+                <GoogleLogin
+                    clientId={`${process.env.REACT_APP_GOOGLE_CLIENT_ID}`}
+                    buttonText="Login"
+                    onSuccess={responseGoogle}
+                    onFailure={responseGoogle}
+                    cookiePolicy={'single_host_origin'}
+                    className='google-button'
+                />
     )
 
 }

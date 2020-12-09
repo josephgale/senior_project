@@ -4,6 +4,7 @@ import Routes from './routes/Routes';
 
 import 'normalize.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
 // import './index.css';
 
 

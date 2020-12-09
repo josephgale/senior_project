@@ -84,19 +84,47 @@ const Enrollment = () => {
         .catch((e)=>console.log('Problem retrieving all lessons from API: ', e))        
     }
     return(
-        <div>
-            <h2>Enrollment </h2>
-            <p><button onClick={toEnrollmentPage}>Enroll in a class</button></p>
-            <p>Your lessons:</p>
-
+        <div className="dash-section">
+            <h2>You are taking:</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Instructor</th>
+                        <th>Lesson</th>
+                        <th>Completed</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
             {
                 values.enrolled.map((each)=>
-                    <li key={each.lesson_id}>
-                        {each.teacher} --- {each.lessonName} --- {each.completed} --- {each.score}
-                        <button onClick={()=>toDoLessonPage(each)}>Start or Resume Lesson</button>
-                    </li>
+                    <tr key={each.lesson_id}>
+                        <td>{each.teacher}</td>
+                        <td>{each.lessonName}</td>
+                        <td>{each.completed}/3</td>
+                        <td>{each.score}/3</td>
+                        {each.score<1?
+                            <td>
+                                <button onClick={()=>toDoLessonPage(each)}>
+                                    Start Lesson
+                                </button>
+                            </td>:
+                            <td>
+                                <button onClick={()=>toDoLessonPage(each)}>
+                                    Resume Lesson
+                                </button>
+                            </td>
+                        }
+                        </tr>
                 )
             }
+                </tbody>
+            </table>
+            <p> 
+                <button className="dash-button" onClick={toEnrollmentPage}>
+                    Enroll in a class
+                </button>
+            </p>
 
         </div>
     )

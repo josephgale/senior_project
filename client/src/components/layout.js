@@ -1,7 +1,9 @@
 import React from 'react';
+import { Nav,Navbar } from 'react-bootstrap';
 import {Link,useHistory} from 'react-router-dom';
 import styled from 'styled-components';
 import {getCookie,removeCookie,removeLocalStorage} from '../validation/helpers'
+//css imported from index.js
 
 const LinkStyled = styled(Link)`
     margin-left: 2em;
@@ -22,16 +24,15 @@ const Layout = (props) => {
 
       
     const nav = () => (
-        <ul className = "nav nav-tabs bg-primary">
-            <li className="nav-item">
+        <Navbar>
                 <LinkStyled to="/" className="text-light">Home</LinkStyled>
                 {!isLoggedIn?<LinkStyled to="/login" className="text-light">Login</LinkStyled>:
                 <LinkStyled to="/login" className="text-light" onClick={handleLogout}>Log out</LinkStyled>}
                 {!isLoggedIn?<LinkStyled to="/signup" className="text-light">Signup</LinkStyled>:""}
                 {isLoggedIn?<LinkStyled to="/dashboard" className="text-light">Dashboard</LinkStyled>:""}
                 {isLoggedIn?<LinkStyled to="/account" className="text-light">Account</LinkStyled>:""}
-            </li>
-        </ul>
+        </Navbar>
+
     );
     return(
         <div>

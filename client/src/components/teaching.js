@@ -1,7 +1,9 @@
 import React, {useEffect,useState} from 'react'
 import {useHistory} from 'react-router-dom'
+import '../App.css'
+import {Row,Col} from 'react-bootstrap'
 import Axios from 'axios'
-import Students from './students'
+
 
 const Teaching = (props) => {   
         
@@ -79,20 +81,29 @@ const Teaching = (props) => {
     }
 
     return(
-        <div>
-            <h2>Lessons you're teaching</h2>
-            <ul>
+        <div className="dash-section">
+            <h2>You are teaching: </h2>
+            <table>
+                <thead>
+                <tr>
+                    <th>Lesson</th>
+                </tr>
+                </thead>
+                <tbody>
                 {
                     values.lessons.map((each)=>
-                        <li key={each._id}>{each.lessonName}
-                            <button onClick={()=>toEditLessonPage(each)}>Edit</button>
-                            <button onClick={()=>deleteLesson(each)}>Delete</button>
-                        </li>
+                        
+                        <tr key={each._id}>
+                            <td>{each.lessonName}</td>
+                            <td><button onClick={()=>toEditLessonPage(each)}>Edit</button></td>
+                            <td><button onClick={()=>deleteLesson(each)}>Delete</button></td>
+                        </tr>
                     )
                 }
-            </ul>
-            <button onClick={toAddLesson}>Create a New Lesson</button>
-            <Students />
+                </tbody>
+            </table>
+            <button className="dash-button" onClick={toAddLesson}>Create a New Lesson</button>
+            
         </div>
        
 

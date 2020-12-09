@@ -3,7 +3,8 @@ const sgMail = require('@sendgrid/mail')
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const User = require('../models/user')
 const Lesson = require('../models/user')
-const {OAuth2Client} = require('google-auth-library')
+const {OAuth2Client} = require('google-auth-library');
+const { hasBrowserCrypto } = require('google-auth-library/build/src/crypto/crypto');
 const ObjectId = require("mongodb").ObjectID
 
 //send email link for account creation
@@ -212,15 +213,13 @@ exports.googleLogin = (req,res) => {
     )
 }
  
-exports.login = (req,res) =>{
+exports.login = async (req,res) =>{
     const email = req.body.email 
-    //validate if email exists and return error if not
-    User.findOne({email}).exec((err,user)=>{
-        if(!user){
-            console.log('No email found',req) 
-            res.status(404).send('Please check email and password')
-        }else{
-            //create a token that will be later added to a cookie
+    const password = req.body.password
+    
+    try{
+        const user = await User.findByCredentials(req.body.email,password) 
+        //create a token that will be later added to a cookie
             const token = jwt.sign({_id:user._id},process.env.JWT_SECRET,{expiresIn: '7d'})
             const {_id,email,name,role} = user;
             console.log('Login credentials are valid') 
@@ -228,8 +227,29 @@ exports.login = (req,res) =>{
                 token, 
                 user: {_id,email,name,role}
             })
-        }
-    })
+    }catch(e){
+        console.log('There was an error ',e )
+        res.status(404).send('Please check email and password')
+    }
+
+    //validate if email exists and return error if not
+    // User.findOne({email}).exec((err,user)=>{
+    //     if(!user){
+    //         console.log('No email found',req) 
+    //         res.status(404).send('Please check email and password')
+    //     }else{
+    //         //validate password
+    //         User.findByCredentials(req.body.email,req.body.password)
+    //         //create a token that will be later added to a cookie
+    //         const token = jwt.sign({_id:user._id},process.env.JWT_SECRET,{expiresIn: '7d'})
+    //         const {_id,email,name,role} = user;
+    //         console.log('Login credentials are valid') 
+    //         res.status(200).send({
+    //             token, 
+    //             user: {_id,email,name,role}
+    //         })
+    //     }
+    // })
 }
 
 exports.newLesson = async (req,res) => {
