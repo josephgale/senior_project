@@ -216,6 +216,14 @@ exports.googleLogin = (req,res) => {
 exports.login = async (req,res) =>{
     const email = req.body.email 
     const password = req.body.password
+
+    //see if user is found
+    try{
+        const user = await User.findByCredentials(req.body.email,password) 
+
+    }catch(e){
+        res.status(404).send({"error":"user was not found"})
+    }
     
     try{
         const user = await User.findByCredentials(req.body.email,password) 
@@ -229,7 +237,7 @@ exports.login = async (req,res) =>{
             })
     }catch(e){
         console.log('There was an error ',e )
-        res.status(404).send('Please check email and password')
+        res.status(404).send({"error":"user found but something else went wrong"})
     }
 
     //validate if email exists and return error if not
