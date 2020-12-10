@@ -9,7 +9,6 @@ const ObjectId = require("mongodb").ObjectID
 
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken')
 
 //send email link for account creation
 exports.signup = async (req,res)=>{    
@@ -265,25 +264,6 @@ exports.login = async (req,res) =>{
         console.log('There was an error ',e )
         res.status(404).send({"error":"user found but something else went wrong"})
     }
-
-    //validate if email exists and return error if not
-    // User.findOne({email}).exec((err,user)=>{
-    //     if(!user){
-    //         console.log('No email found',req) 
-    //         res.status(404).send('Please check email and password')
-    //     }else{
-    //         //validate password
-    //         User.findByCredentials(req.body.email,req.body.password)
-    //         //create a token that will be later added to a cookie
-    //         const token = jwt.sign({_id:user._id},process.env.JWT_SECRET,{expiresIn: '7d'})
-    //         const {_id,email,name,role} = user;
-    //         console.log('Login credentials are valid') 
-    //         res.status(200).send({
-    //             token, 
-    //             user: {_id,email,name,role}
-    //         })
-    //     }
-    // })
 }
 
 exports.newLesson = async (req,res) => {
