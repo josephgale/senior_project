@@ -217,6 +217,21 @@ exports.login = async (req,res) =>{
     const email = req.body.email 
     const password = req.body.password
 
+    //see if a mongo connection is being made: 
+    try {
+        const mongoose = require('mongoose'); 
+
+    mongoose.connect(process.env.DB_CONNECT,{ 
+    useNewUrlParser: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true,
+    useCreateIndex: true
+})
+
+    }catch(e){
+        res.status(404).send({"error":"connection not made"})
+    }
+
     //see if user is found
     try{
         const user = await User.findByCredentials(req.body.email,password) 
