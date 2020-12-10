@@ -219,39 +219,10 @@ exports.googleLogin = (req,res) => {
 exports.login = async (req,res) =>{
     const email = req.body.email 
     const password = req.body.password
-
-    //see if a mongo connection is being made: 
-    try {
-
-    mongoose.connect(process.env.DB_CONNECT,{ 
-    useNewUrlParser: true,
-    useFindAndModify: false,
-    useUnifiedTopology: true,
-    useCreateIndex: true
-})
-
-    }catch(e){
-        res.status(404).send({"error":"connection not made"})
-    }
-
-    //see if user is found
+   
     try{
-        const user = await User.find({email}) 
-        if(!user){
-            throw new Error('Unable to login - user')
-        }
-        const isMatch = await bcrypt.compare(password,user.password)
-    
-        if(!isMatch){
-            throw new Error('Unable to login - password')
-        }
-
-    }catch(e){
-        res.status(404).send(e)
-    }
-    
-    try{
-        const user = await User.findByCredentials(req.body.email,password) 
+        //const user = await User.findByCredentials(req.body.email,password) 
+        const user = await User.find({email:req.body.email}) 
         //create a token that will be later added to a cookie
             const token = jwt.sign({_id:user._id},process.env.JWT_SECRET,{expiresIn: '7d'})
             const {_id,email,name,role} = user;
