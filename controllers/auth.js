@@ -234,10 +234,10 @@ exports.login = async (req,res) =>{
 
     //see if user is found
     try{
-        const user = await User.findByCredentials(req.body.email,password) 
+        const user = await User.findByCredentials(email,password) 
 
     }catch(e){
-        res.status(404).send({"error":"user was not found"})
+        res.status(404).send({"error":"user was not found", "error":e})
     }
     
     try{
