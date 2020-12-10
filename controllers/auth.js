@@ -7,9 +7,6 @@ const {OAuth2Client} = require('google-auth-library');
 const { hasBrowserCrypto } = require('google-auth-library/build/src/crypto/crypto');
 const ObjectId = require("mongodb").ObjectID
 
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-
 //send email link for account creation
 exports.signup = async (req,res)=>{    
         const {firstName,lastName,name,email,password,role} = req.body;   
@@ -221,8 +218,7 @@ exports.login = async (req,res) =>{
     const password = req.body.password
    
     try{
-        //const user = await User.findByCredentials(req.body.email,password) 
-        const user = await User.find({email:req.body.email}) 
+        const user = await User.findByCredentials(req.body.email,password) 
         //create a token that will be later added to a cookie
             const token = jwt.sign({_id:user._id},process.env.JWT_SECRET,{expiresIn: '7d'})
             const {_id,email,name,role} = user;

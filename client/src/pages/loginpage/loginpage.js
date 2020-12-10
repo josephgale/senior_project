@@ -86,7 +86,7 @@ const LoginPage =()=>{
                     <Row className="login-row">
                         <Col>
                         <div id="login-form-div">
-                            <p class='google-message'>Sign in with Google</p>
+                            <p className='google-message'>Sign in with Google</p>
                             <Google /> 
                             <p>or</p>
                             {loginForm()} 
@@ -95,7 +95,7 @@ const LoginPage =()=>{
                         <Col>
                         <div className="features-list-div">
                                 <h1 className='h1mod-alt'>Features of this form:</h1>
-                                <ul class='features-list'>
+                                <ul className='features-list'>
                                     <li>OAuth2 and Google API used for login (problems with Firefox) </li>
                                     <li>MongoDB schema created with Mongoose handles password decryption</li>
                                     <li>Upon login, local storage is set with a JSON web token as a session cookie and the user's email is stored as a separate key-value pair for requests to MongoDB </li>
