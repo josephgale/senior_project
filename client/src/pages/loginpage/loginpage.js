@@ -21,7 +21,7 @@ const LoginPage =()=>{
     })
 
     useEffect(()=>{
-        console.log('There was an error')
+        console.log('Attempting to update state')
     },[values.error])
 
     const history = useHistory()
