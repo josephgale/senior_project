@@ -7,6 +7,10 @@ const {OAuth2Client} = require('google-auth-library');
 const { hasBrowserCrypto } = require('google-auth-library/build/src/crypto/crypto');
 const ObjectId = require("mongodb").ObjectID
 
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken')
+
 //send email link for account creation
 exports.signup = async (req,res)=>{    
         const {firstName,lastName,name,email,password,role} = req.body;   
@@ -219,7 +223,6 @@ exports.login = async (req,res) =>{
 
     //see if a mongo connection is being made: 
     try {
-        const mongoose = require('mongoose'); 
 
     mongoose.connect(process.env.DB_CONNECT,{ 
     useNewUrlParser: true,
