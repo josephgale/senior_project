@@ -50,8 +50,9 @@ const LoginPage =()=>{
                     history.push('/dashboard')
                 })
             })
-            .catch((res)=> 
+            .catch((err)=> 
                 setValues(values=>({...values,error:"Please check email and password"})) )
+                console.log("here is the login error: ", err)
         }
     }
     const loginForm = () => (
