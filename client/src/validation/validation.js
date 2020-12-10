@@ -43,7 +43,7 @@ export const ValidateFields=(values,setValues)=>{
         }
     })
     .then((res)=>{
-        if(res.data.emailFound&&(currentEmail!=values.email)){
+        if(res.data.emailFound&&(currentEmail!==values.email)){
             setValues(values=>({...values,errors:{...values.errors,emailFound:'You cannot use this address'}})) 
         }else{
             setValues(values=>({...values,errors:{...values.errors,emailFound:''}}))  

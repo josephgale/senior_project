@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from 'react'
 import Layout from '../../components/layout'
-import {withRouter} from 'react-router-dom'
 import {Form} from '../signuppage/signup.styles'
 import Axios from 'axios'
 import {useHistory} from 'react-router-dom'
 import {ValidateFields} from '../../validation/validation'
-import {getCookie,removeCookie,removeLocalStorage} from '../../validation/helpers'
+import {removeCookie,removeLocalStorage} from '../../validation/helpers'
 
 const Account = (props) => {
     //declare constants for history and initial state setup

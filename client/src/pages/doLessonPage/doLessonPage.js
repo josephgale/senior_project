@@ -3,8 +3,9 @@ import Layout from '../../components/layout'
 import {useHistory,withRouter} from 'react-router-dom'
 import Axios from 'axios'
 import {Form} from '../signuppage/signup.styles'
+require('dotenv').config();
 const sdk = require("microsoft-cognitiveservices-speech-sdk");
-const speechConfig = sdk.SpeechConfig.fromSubscription("e1f8581561cb4f75a9da97c1bcdba067", "eastus");
+const speechConfig = sdk.SpeechConfig.fromSubscription(process.env.REACT_APP_MS_API_KEY, "eastus");
 
 const DoLesson = (props) => {
     const [values, setValues] = useState({

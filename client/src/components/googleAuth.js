@@ -1,5 +1,4 @@
 import React from 'react';
-import {Form} from '../styles'
 import '../App.css'
 import {useHistory} from 'react-router-dom'
 import GoogleLogin from 'react-google-login';

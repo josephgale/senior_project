@@ -526,3 +526,28 @@ exports.deleteAccount = (req,res)=>{
         {_id:req.body.id}
     ).exec((err,post)=>err?res.send('Account was not deleted'):res.send('account deleted')) 
 } 
+
+exports.deleteEnrollment = (req,res)=>{
+    console.log('email: ', req.body.email)
+    console.log('enrolled:',req.body.lesson_id)
+    User.findOneAndUpdate(        
+        { "email":req.body.email},
+        { $pull: 
+            {
+                "enrolled": {
+                    "lesson_id": req.body.lesson_id
+                }
+            }
+        }
+    )
+    .exec((err,doc)=>{
+        if(err){
+            console.log('There was an error dropping lesson',doc)
+            return res.status(400).send(err)
+        }else{
+            console.log('Possible success in dropping lesson')
+            return res.status(200).send("Possible success dropping lesson")
+        }
+    })
+
+}

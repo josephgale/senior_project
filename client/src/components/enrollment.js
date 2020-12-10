@@ -12,7 +12,7 @@ const Enrollment = () => {
     //useEffect will populate initital enrollment list and update as user enrolls in classes, since getEnrolledLessons() changes state
     useEffect(() => { 
         getEnrolledLessons() 
-      }, [values.enrolled]);
+      }, []);
 
     //get user id from local storage to authenticate API call
     const user = localStorage.getItem('user')
@@ -83,6 +83,29 @@ const Enrollment = () => {
         )
         .catch((e)=>console.log('Problem retrieving all lessons from API: ', e))        
     }
+
+    const deleteLesson = (lesson_id)=>{
+        console.log('Deleting lesson',lesson_id)
+        Axios(
+            {
+            method: 'POST',
+            url: '/api/deleteEnrollment',
+            data: {
+                email,
+                lesson_id
+            }
+            }
+        )
+        .then((res)=>
+            { 
+                console.log('item possibly deleted')
+                //make api call, change state with updated lessons so that deleted lessons don't show up
+                getEnrolledLessons()
+                
+            }
+        )
+        .catch((e)=>console.log('Problem retrieving all lessons from API: ', e))
+    }
     return(
         <div className="dash-section">
             <h2>You are taking:</h2>
@@ -115,6 +138,7 @@ const Enrollment = () => {
                                 </button>
                             </td>
                         }
+                        <td><button onClick={()=>deleteLesson(each.lesson_id)}>Drop Lesson</button></td>
                         </tr>
                 )
             }

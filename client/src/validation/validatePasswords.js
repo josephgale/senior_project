@@ -4,7 +4,6 @@
 
 *This function is used by pwresetpage.js
 */
-import React from 'react'
 
 const ValidatePasswords = (values,setValues) => {  
     //validate that passwords match criteria

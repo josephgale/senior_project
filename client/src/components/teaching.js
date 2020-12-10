@@ -1,7 +1,6 @@
 import React, {useEffect,useState} from 'react'
 import {useHistory} from 'react-router-dom'
 import '../App.css'
-import {Row,Col} from 'react-bootstrap'
 import Axios from 'axios'
 
 

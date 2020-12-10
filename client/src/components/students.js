@@ -1,11 +1,9 @@
 import React, {useEffect,useState} from 'react'
-import {useHistory} from 'react-router-dom'
 import Axios from 'axios'
 
 const Students = () => {
     //get user id from local storage to authenticate API call
     const user = localStorage.getItem('user')
-    const email = JSON.parse(user).email 
 
     //create state so that when lesson deletes it re-renders
     const [values, setValues] = useState({
@@ -51,7 +49,7 @@ const Students = () => {
                     (eachStudent.enrolled.map((eachClass)=>
                         {
                             //only include classes by current teacher
-                            if(eachClass.teacher==JSON.parse(user).name){
+                            if(eachClass.teacher===JSON.parse(user).name){
                                 return (
                                     <tr key={eachStudent.name + eachStudent.lessonName}>
                                         <td>{eachStudent.name}</td>
