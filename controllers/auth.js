@@ -235,9 +235,17 @@ exports.login = async (req,res) =>{
     //see if user is found
     try{
         const user = await User.find({email}) 
+        if(!user){
+            throw new Error('Unable to login - user')
+        }
+        const isMatch = await bcrypt.compare(password,user.password)
+    
+        if(!isMatch){
+            throw new Error('Unable to login - password')
+        }
 
     }catch(e){
-        res.status(404).send({"error":"user was not found", "error":e})
+        res.status(404).send({"error":"user was not found"})
     }
     
     try{
