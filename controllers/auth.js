@@ -247,7 +247,7 @@ exports.login = async (req,res) =>{
         }
 
     }catch(e){
-        res.status(404).send({"error":"user was not found"})
+        res.status(404).send(e)
     }
     
     try{
